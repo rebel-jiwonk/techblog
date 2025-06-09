@@ -12,6 +12,30 @@
   --font-mono: var(--font-geist-mono);
 }
 
+@font-face {
+  font-family: "Pretendard";
+  src: url("/fonts/pretendard.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Soehne";
+  src: url("/fonts/soehne.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Mono";
+  src: url("/fonts/space-mono.woff2") format("woff2");
+}
+
+html[lang="ko"] body {
+  font-family: "Pretendard", sans-serif;
+}
+html[lang="en"] body {
+  font-family: "Soehne", sans-serif;
+}
+
+button, .button-text {
+  font-family: "Space Mono", monospace;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
