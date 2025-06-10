@@ -1,21 +1,36 @@
+"use client";
+
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 import LanguageToggle from "@/components/LanguageToggle";
+import DarkModeToggle from "@/components/DarkModeToggle";
 import Link from "next/link";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <body className="bg-base-50 text-base-800 font-sans">
-        <header className="border-b border-base-200 px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-base-800 font-bold text-lg uppercase tracking-wide">
-            TECHBLOG
-          </Link>
-          <LanguageToggle />
-        </header>
-        <main className="max-w-5xl mx-auto px-6 py-12">{children}</main>
-        <footer className="border-t border-base-200 mt-24 py-8 text-center text-sm text-base-500">
-          &copy; {new Date().getFullYear()} TECHBLOG
-        </footer>
+    <html lang="ko" suppressHydrationWarning>
+      <body className="bg-base-50 text-base-800 dark:bg-base-800 dark:text-base-50 font-sans transition-colors duration-200">
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={true}>
+          <div className="bg-base-50 text-base-800 dark:bg-base-800 dark:text-base-50 min-h-screen flex flex-col">
+            <header className="border-b border-base-200 dark:border-base-700 px-6 py-4 flex items-center justify-between">
+              <Link href="/" className="text-lg font-bold uppercase">
+                TECHBLOG
+              </Link>
+              <div className="flex items-center gap-4">
+                <DarkModeToggle />
+                <LanguageToggle />
+              </div>
+            </header>
+
+            <main className="max-w-5xl mx-auto px-6 py-12 flex-grow">
+              {children}
+            </main>
+
+            <footer className="border-t border-base-200 dark:border-base-700 mt-24 py-8 text-center text-sm text-base-500 dark:text-base-400">
+              &copy; {new Date().getFullYear()} TECHBLOG
+            </footer>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

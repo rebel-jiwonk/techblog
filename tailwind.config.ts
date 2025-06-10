@@ -1,6 +1,7 @@
 import { type Config } from "tailwindcss";
 
 const config: Config = {
+  darkMode: "class",
   content: ["./app/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -19,17 +20,17 @@ const config: Config = {
           500: "#808A96",
           600: "#3B434B",
           700: "#23292F",
-          800: "#1B1F23",
+          800: "#1B1F23", // use this for dark bg
         },
         accent: {
           green: "#52F756",
         },
       },
       borderRadius: {
-        DEFAULT: "0px", // disables rounding globally
+        DEFAULT: "0px",
       },
       boxShadow: {
-        none: "none", // disables shadow utility
+        none: "none",
       },
     },
   },

@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
 
-export default function KoreanHome() {
-  const posts = getAllPosts("ko");
+export default async function KoreanHome() {
+  const posts = await getAllPosts("ko");
 
   return (
     <div className="space-y-24">
@@ -21,13 +21,13 @@ export default function KoreanHome() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((post) => (
             <Link
-              key={post.slug}
-              href={`/ko/blog/${post.slug}`}
-              className="block border border-base-300 p-6 bg-white hover:bg-base-100"
-            >
-              <h3 className="font-bold text-lg">{post.title}</h3>
-              <p className="text-sm text-base-600">{post.description}</p>
-            </Link>
+            key={post.slug}
+            href={`/en/blog/${post.slug}`}
+            className="block border border-base-300 dark:border-base-600 p-6 bg-base-50 dark:bg-base-800 hover:bg-base-100 dark:hover:bg-base-700 transition-colors"
+          >
+            <h3 className="font-bold text-lg text-base-800 dark:text-base-50">{post.title}</h3>
+            <p className="text-sm text-base-600 dark:text-base-400">{post.description}</p>
+          </Link>
           ))}
         </div>
       </section>
