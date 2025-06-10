@@ -1,6 +1,6 @@
 "use client";
 
-import "./globals.css";
+import "@/app/globals.css";
 import { ThemeProvider } from "next-themes";
 import LanguageToggle from "@/components/LanguageToggle";
 import DarkModeToggle from "@/components/DarkModeToggle";
