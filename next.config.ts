@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  output: 'export',
+  distDir: 'out',
+  basePath: '/techblog', // <- Use your repo name
+  assetPrefix: '/techblog',
+  trailingSlash: true,
 };
 
-export default nextConfig;
+module.exports = nextConfig;
