@@ -21,5 +21,7 @@ export const AUTHORS: Record<string, { image: string }> = {
     "김희준": { image: "/authors/heejun.png" },
     "Kim Hyun-woo": { image: "/authors/hyunwoo.png" },
     "김현우": { image: "/authors/hyunwoo.png" },
+    "Lim Jeong-su": { image: "/authors/jeongsu.png" },
+    "임정수": { image: "/authors/jeongsu.png" },
 
   };
