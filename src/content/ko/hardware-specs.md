@@ -5,7 +5,7 @@ description: "최신 AI 칩 REBEL의 구조와 주요 성능 지표를 정리했
 date: "2024-06-01"
 lang: "ko"
 tags: ["하드웨어", "퍼포먼스"]
-authors: ["김현우"]
+authors: ["낚시꾼"]
 ---
 
 REBEL은 4개의 칩렛 구조를 기반으로 하며, 144GB HBM3e를 탑재하고 있습니다.  
