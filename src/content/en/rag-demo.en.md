@@ -1,6 +1,6 @@
 ---
 title: "RAG Demo on RBLNCloud"
-slug: "rag-demo-architecture"
+slug: "rag-demo"
 description: "End-to-end RAG setup on Kubernetes using vLLM, BGE embeddings, and a vector database."
 date: "2024-06-11"
 lang: "en"

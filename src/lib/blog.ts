@@ -1,3 +1,5 @@
+"use server";
+
 import { readFile, readdir } from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
@@ -32,7 +34,7 @@ export async function getAllPosts(lang: "ko" | "en"): Promise<BlogPost[]> {
 
         return {
           title: data.title,
-          slug: data.slug,
+          slug, // use filename if frontmatter has no slug
           description: data.description,
           date: data.date,
           tags: data.tags,

@@ -1,6 +1,6 @@
 ---
 title: "RBLNCloud에서 RAG 데모 구축하기"
-slug: "rag-demo-architecture-ko"
+slug: "rag-demo"
 description: "vLLM, BGE 임베딩, 벡터 데이터베이스를 활용한 RAG 파이프라인 구축 사례"
 date: "2024-06-11"
 lang: "ko"
