@@ -43,6 +43,94 @@ button, .button-text {
   }
 }
 
+/* Light mode styles */
+.prose pre {
+  background-color: #F8F8FA !important;
+  padding: 1rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  overflow-x: auto;
+}
+
+.prose code {
+  background-color: #F2F4F6 !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+}
+
+/* Dark mode overrides */
+.dark .prose pre {
+  background-color: #1F2937 !important; /* Tailwind gray-800 */
+  color: #F8FAFC !important; /* Tailwind gray-100 */
+}
+
+.dark .prose code {
+  background-color: #374151 !important; /* Tailwind gray-700 */
+  color: #F8FAFC !important;
+}
+
+.prose ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.3rem;
+  padding-left: 0.25rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  color: #23292F; /* Adjust for light mode */
+}
+
+.dark .prose li {
+  color: #F5F5F5; /* Light color for dark mode */
+}
+
+.prose p {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.8;
+  font-size: 1rem;
+  color: #1B1F23;
+}
+
+.dark .prose p {
+  color: #EAECEF;
+}
+
+.prose h2 {
+  font-size: 1.5rem; /* ~24px */
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #1B1F23;
+  border-bottom: 1px solid #E2EBF2;
+  padding-bottom: 0.4rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem; /* ~20px */
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+  color: #1B1F23;
+}
+
+/* === Dark mode overrides === */
+
+.dark .prose li,
+.dark .prose p,
+.dark .prose h2,
+.dark .prose h3 {
+  color: #F5F5F5;
+}
+
+.dark .prose h2 {
+  border-bottom: 1px solid #3B434B;
+}
+
 /* body {
   background: var(--background);
   color: var(--foreground);

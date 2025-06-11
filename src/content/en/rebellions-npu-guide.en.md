@@ -8,13 +8,12 @@ authors: ["Lim Ji-eun", "Kwon Min-jae"]
 tags: ["Performance"]
 ---
 
-When NPU performance doesn’t meet expectations, the root cause is often not in software or model design — but rather in **low-level system configuration**.  
+When NPU performance doesn’t meet expectations, the root cause is often not in software or model design — but rather in **low-level system configuration**.
+
 Two often overlooked yet highly impactful tuning steps are:
 
 - CPU governor mode
 - NUMA-based CPU and memory binding
-
----
 
 ### 1. Checking and Changing CPU Governor Mode
 

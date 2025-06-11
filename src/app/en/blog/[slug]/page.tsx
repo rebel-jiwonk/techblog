@@ -1,8 +1,10 @@
 import { getPost, getAllPosts } from "@/lib/blog"; // Assume getAllPosts fetches all post metadata
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
+import remarkBreaks from "remark-breaks";
 import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
+import rehypeRaw from "rehype-raw";
 
 // Define the params type for the page
 interface PageProps {
@@ -49,20 +51,19 @@ export default async function BlogPostPage({ params }: PageProps) {
       <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
 
       {/* Authors */}
-      <div className="flex items-center gap-4 mb-2">
-        {post.authors?.map((author, i) => {
-          const authorData = AUTHORS[author];
-          return (
-            <div key={i} className="flex items-center gap-2 text-sm text-base-500">
+            <div className="flex items-center gap-4 mb-2">
+        {post.authors?.map((author, i) => (
+          <div key={i} className="flex items-center gap-2 text-sm text-base-500">
+            {AUTHORS[author]?.image && (
               <img
-                src={`/authors/${authorData.image}`}
+                src={`/authors/${AUTHORS[author].image}`}
                 alt={author}
-                className="w-7 h-7 rounded-full object-cover"
+                className="w-7 h-7 object-cover rounded-full"
               />
-              <span>{author}</span>
-            </div>
-          );
-        })}
+            )}
+            <span>{author}</span>
+          </div>
+        ))}
       </div>
 
       {/* Date */}
@@ -82,8 +83,24 @@ export default async function BlogPostPage({ params }: PageProps) {
       </div>
 
       {/* Content */}
-      <div className="prose prose-lg dark:prose-invert">
-                <ReactMarkdown>{post.content}</ReactMarkdown>
+      <div className="prose prose-lg dark:prose-invert max-w-none
+              prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
+              prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
+              <ReactMarkdown
+                  remarkPlugins={[remarkBreaks]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    img: ({ node, ...props }) => (
+                      <img
+                        {...props}
+                        className="rounded-md my-4 w-full max-w-full object-contain"
+                        alt={props.alt || ""}
+                      />
+                    ),
+                  }}
+                >
+                {post.content}
+              </ReactMarkdown>
       </div>
     </article>
   );

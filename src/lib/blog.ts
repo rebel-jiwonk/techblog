@@ -8,7 +8,8 @@ import type { BlogPost } from "@/types";
 const CONTENT_DIR = path.join(process.cwd(), "src/content");
 
 export async function getPost(lang: "ko" | "en", slug: string): Promise<BlogPost> {
-  const filePath = path.join(CONTENT_DIR, lang, `${slug}.md`);
+  const extension = lang === "en" ? ".en.md" : ".md";
+  const filePath = path.join(CONTENT_DIR, lang, `${slug}${extension}`);
   const fileContent = await readFile(filePath, "utf-8");
   const { data, content } = matter(fileContent);
 
@@ -27,7 +28,7 @@ export async function getAllPosts(lang: "ko" | "en"): Promise<BlogPost[]> {
     files
       .filter((filename) => filename.endsWith(".md"))
       .map(async (filename) => {
-        const slug = filename.replace(/\.md$/, "");
+        const slug = filename.replace(/\.en\.md$|\.md$/, "");
         const filePath = path.join(dirPath, filename);
         const fileContent = await readFile(filePath, "utf-8");
         const { data, content } = matter(fileContent);
