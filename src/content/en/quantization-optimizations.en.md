@@ -5,7 +5,7 @@ description: "Explore how fine-tuned quantization boosts performance on Rebellio
 date: "2024-06-10"
 lang: "en"
 tags: ["Quantization", "Performance"]
-authors: ["Kim Hee-jun"]
+authors: ["Fisherman"]
 ---
 
 Static and dynamic quantization can reduce model size and inference latency significantly.  

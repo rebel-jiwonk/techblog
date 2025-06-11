@@ -4,7 +4,7 @@ slug: "rebellions-npu-guide-en"
 description: "System-level optimizations via CPU governor, NUMA settings"
 date: "2024-06-09"
 lang: "en"
-authors: ["Lim Ji-eun", "Kwon Min-jae"]
+authors: ["Fisherman", "Fisherman"]
 tags: ["Performance"]
 ---
 

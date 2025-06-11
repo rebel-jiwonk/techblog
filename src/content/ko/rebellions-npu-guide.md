@@ -4,7 +4,7 @@ slug: "rebellions-npu-guide"
 description: "CPU governor, NUMA 최적화 등 시스템 레벨에서 성능을 끌어올리는 방법"
 date: "2024-06-09"
 lang: "ko"
-authors: ["임지은", "권민재"]
+authors: ["임지은", "낚시꾼"]
 tags: ["퍼포먼스"]
 ---
 

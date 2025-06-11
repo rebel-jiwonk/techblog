@@ -4,7 +4,7 @@ slug: "konan-rebellions-llm"
 description: "코난 LLM이 리벨리온 아톰 서버에 탑재된 'AI 스테이션 서버'로 작동하며, 국산 AI 생태계의 기술 융합 가능성을 입증하다."
 date: "2024-06-09"
 lang: "ko"
-authors: ["공태준"]
+authors: ["낚시꾼"]
 tags: ["솔루션"]
 ---
 

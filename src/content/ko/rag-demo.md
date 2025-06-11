@@ -5,7 +5,7 @@ description: "vLLM, BGE 임베딩, 벡터 데이터베이스를 활용한 RAG �
 date: "2024-06-11"
 lang: "ko"
 tags: ["솔루션", "툴", "최적화"]
-authors: ["전찬용"]
+authors: ["낚시꾼"]
 ---
 
 [RBLNCloud 데모 페이지](https://demo.rblncloud.com)에 RAG(Retrieval-Augmented Generation) 파이프라인을 구축했습니다.  

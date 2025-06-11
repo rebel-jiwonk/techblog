@@ -5,7 +5,7 @@ description: "Learn how to quantize deep learning models effectively for Rebelli
 date: "2024-05-18"
 lang: "en"
 tags: ["Quantization", "Optimization"]
-authors: ["Paul Kuper", "Jo Gwi-hyun"]
+authors: ["Fisherman", "Fisherman"]
 ---
 
 Quantization can drastically reduce model size and latency. Use per-channel quantization for convolutional layers, and be mindful of accuracy loss with activation quantization. 

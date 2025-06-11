@@ -5,7 +5,7 @@ description: "End-to-end RAG setup on Kubernetes using vLLM, BGE embeddings, and
 date: "2024-06-11"
 lang: "en"
 tags: ["Solution", "Tools", "Optimization"]
-authors: ["Jeon Chan-yong"]
+authors: ["Fisherman"]
 ---
 
 We've deployed a full RAG (Retrieval-Augmented Generation) pipeline at [demo.rblncloud.com](https://demo.rblncloud.com).  

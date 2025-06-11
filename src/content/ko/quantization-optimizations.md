@@ -5,7 +5,7 @@ description: "Rebellions NPU에서 양자화를 통해 성능을 높이는 방�
 date: "2024-06-10"
 lang: "ko"
 tags: ["양자화", "퍼포먼스"]
-authors: ["김희준"]
+authors: ["낚시꾼"]
 ---
 
 정적 양자화와 동적 양자화를 활용하면 모델 크기와 지연 시간을 효과적으로 줄일 수 있습니다.  

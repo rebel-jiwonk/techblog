@@ -4,7 +4,7 @@ slug: "konan-rebellions-llm"
 description: "Konan’s LLM now runs on Rebellions’ ATOM server in the form of the ‘Konan AI Station Server’, showcasing a successful fusion of domestic AI software and NPU hardware."
 date: "2024-06-09"
 lang: "en"
-authors: ["Kong Tae-jun"]
+authors: ["Fisherman"]
 tags: ["Solution"]
 ---
 
