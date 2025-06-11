@@ -56,7 +56,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div key={i} className="flex items-center gap-2 text-sm text-base-500">
             {AUTHORS[author]?.image && (
               <img
-                src={`/authors/${AUTHORS[author].image}`}
+                src={AUTHORS[author].image}
                 alt={author}
                 className="w-7 h-7 object-cover rounded-full"
               />
@@ -90,7 +90,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             remarkPlugins={[remarkBreaks]}
             rehypePlugins={[rehypeRaw]}
             components={{
-              img: ({ node, ...props }) => (
+              img: ({ ...props }) => (
                 <img
                   {...props}
                   className="rounded-md my-4 w-full max-w-full object-contain"
