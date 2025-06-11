@@ -4,6 +4,8 @@ slug: "rebellions-npu-guide-en"
 description: "System-level optimizations via CPU governor, NUMA settings"
 date: "2024-06-09"
 lang: "en"
+authors: ["Lim Jee-un", "Kwon Min-jae"]
+tags: ["Performance"]
 ---
 
 When NPU performance doesn’t meet expectations, the root cause is often not in software or model design — but rather in **low-level system configuration**.  

@@ -4,6 +4,8 @@ slug: "konan-rebellions-llm"
 description: "Konan’s LLM now runs on Rebellions’ ATOM server in the form of the ‘Konan AI Station Server’, showcasing a successful fusion of domestic AI software and NPU hardware."
 date: "2024-06-09"
 lang: "en"
+authors: ["Kong Tae-jun"]
+tags: ["Solution"]
 ---
 
 Korean AI software company **Konan Technology** has announced the deployment of its large language model (LLM) on **Rebellions' NPU-based ATOM server**, integrated as the **"Konan AI Station Server."**

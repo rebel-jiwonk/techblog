@@ -1,15 +1,7 @@
 import { readFile, readdir } from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
-
-export interface BlogPost {
-  title: string;
-  slug: string;
-  description: string;
-  date: string;
-  lang: string;
-  content: string;
-}
+import type { BlogPost } from "@/types";
 
 const CONTENT_DIR = path.join(process.cwd(), "src/content");
 
@@ -39,8 +31,13 @@ export async function getAllPosts(lang: "ko" | "en"): Promise<BlogPost[]> {
         const { data, content } = matter(fileContent);
 
         return {
-          ...(data as Omit<BlogPost, "content">),
-          slug,
+          title: data.title,
+          slug: data.slug,
+          description: data.description,
+          date: data.date,
+          tags: data.tags,
+          authors: data.authors,
+          lang: lang as "en" | "ko",
           content,
         };
       })

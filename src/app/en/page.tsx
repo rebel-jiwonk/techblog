@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import BlogGrid from "@/components/BlogGrid";
 
 export default async function EnglishHome() {
   const posts = await getAllPosts("en");
@@ -15,29 +15,24 @@ export default async function EnglishHome() {
         <div className="h-1 w-24 bg-accent-green" />
       </section>
 
-      {/* Blog Grid */}
+      {/* Blog Grid with Filters */}
       <section>
         <h2 className="text-2xl font-bold mb-6">Latest Posts</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <Link
-            key={post.slug}
-            href={`/en/blog/${post.slug}`}
-            className="block border border-base-300 dark:border-base-600 p-6 bg-base-50 dark:bg-base-800 hover:bg-base-100 dark:hover:bg-base-700 transition-colors"
-          >
-            <h3 className="font-bold text-lg text-base-800 dark:text-base-50">{post.title}</h3>
-            <p className="text-sm text-base-600 dark:text-base-400">{post.description}</p>
-          </Link>
-          ))}
-        </div>
+        <BlogGrid
+          initialPosts={posts}
+          labels={{
+            filteringBy: "Filtering by:",
+            clear: "Clear Filters",
+            by: "by",
+          }}
+        />
       </section>
 
       {/* About Section */}
       <section className="border-t border-base-200 pt-12 space-y-4">
         <h2 className="text-2xl font-bold">About This Blog</h2>
         <p className="text-base text-base-600 leading-relaxed">
-          Whis blog covers insights on AI chip architecture,
-          inference optimization, and the intersection of hardware and deep learning.
+          This blog covers insights on AI chip architecture, inference optimization, and the intersection of hardware and deep learning.
         </p>
       </section>
     </div>

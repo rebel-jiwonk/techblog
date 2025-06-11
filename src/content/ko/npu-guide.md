@@ -4,6 +4,8 @@ slug: "rebellions-npu-guide"
 description: "CPU governor, NUMA 최적화 등 시스템 레벨에서 성능을 끌어올리는 방법"
 date: "2024-06-09"
 lang: "ko"
+authors: ["임지은", "권민재"]
+tags: ["퍼포먼스"]
 ---
 
 NPU 성능이 기대만큼 나오지 않는다고 느껴질 때, 가장 먼저 확인해야 할 것은 소프트웨어 최적화나 모델 구조가 아닌, **시스템 레벨의 기본 설정**입니다.  

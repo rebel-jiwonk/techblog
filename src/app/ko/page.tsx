@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { getAllPosts } from "@/lib/blog";
+import BlogGrid from "@/components/BlogGrid";
 
 export default async function KoreanHome() {
   const posts = await getAllPosts("ko");
@@ -8,35 +8,31 @@ export default async function KoreanHome() {
     <div className="space-y-24">
       {/* Hero Section */}
       <section className="space-y-4">
-        <h1 className="text-5xl font-bold tracking-tight leading-tight">안녕하세요</h1>
+        <h1 className="text-5xl font-bold tracking-tight leading-tight">환영합니다</h1>
         <p className="text-xl text-base-600">
-          리벨리온의 기술과 인사이트를 공유하는 블로그입니다.
+          이 블로그는 리벨리온의 AI 칩 및 시스템 관련 기술 인사이트를 공유합니다.
         </p>
         <div className="h-1 w-24 bg-accent-green" />
       </section>
 
-      {/* Real Blog Grid */}
+      {/* Blog Grid with Filters */}
       <section>
         <h2 className="text-2xl font-bold mb-6">최신 글</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {posts.map((post) => (
-            <Link
-            key={post.slug}
-            href={`/en/blog/${post.slug}`}
-            className="block border border-base-300 dark:border-base-600 p-6 bg-base-50 dark:bg-base-800 hover:bg-base-100 dark:hover:bg-base-700 transition-colors"
-          >
-            <h3 className="font-bold text-lg text-base-800 dark:text-base-50">{post.title}</h3>
-            <p className="text-sm text-base-600 dark:text-base-400">{post.description}</p>
-          </Link>
-          ))}
-        </div>
+        <BlogGrid
+          initialPosts={posts}
+          labels={{
+            filteringBy: "다음 기준으로 필터링됨:",
+            clear: "필터 초기화",
+            by: "작성자",
+          }}
+        />
       </section>
 
       {/* About Section */}
       <section className="border-t border-base-200 pt-12 space-y-4">
-        <h2 className="text-2xl font-bold">이 블로그에 대해</h2>
+        <h2 className="text-2xl font-bold">이 블로그에 대하여</h2>
         <p className="text-base text-base-600 leading-relaxed">
-          리벨리온의 기술과 인사이트를 알아보세요!
+          리벨리온의 AI 칩 아키텍처, 추론 최적화, 하드웨어와 딥러닝의 교차점에 대한 기술적 인사이트를 다룹니다.
         </p>
       </section>
     </div>
