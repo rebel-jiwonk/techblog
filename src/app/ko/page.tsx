@@ -33,7 +33,7 @@ export default async function KoreanHome() {
       <section>
         <h2 className="text-2xl font-bold mb-6">최신 글</h2>
         <BlogGrid
-          initialPosts={posts}
+          initialPosts={posts.slice(0, 6)}
           labels={{
             filteringBy: "다음 기준으로 필터링됨:",
             clear: "필터 초기화",
