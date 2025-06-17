@@ -7,9 +7,9 @@ import rehypeRaw from "rehype-raw";
 import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
 
-interface PageProps {
+type PageProps = {
   params: { slug: string };
-}
+};
 
 const tagColors: Record<string, string> = {
   Performance: "bg-[#FFF9E3]",
@@ -72,7 +72,9 @@ export default async function BlogPostPage({ params }: PageProps) {
                 className="w-7 h-7 object-cover rounded-full"
               />
             )}
-            <span>{post.author_email}</span>
+             <span>
+              {AUTHORS[post.author_email]?.name_ko || post.author_email}
+            </span>
           </div>
         </div>
   
