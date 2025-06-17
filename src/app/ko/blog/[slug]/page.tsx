@@ -8,8 +8,8 @@ import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
 
 type PageProps = {
-  params: { slug: string };
-};
+  params: Promise<{ slug: string }>
+}
 
 const tagColors: Record<string, string> = {
   Performance: "bg-[#FFF9E3]",
@@ -32,7 +32,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
   const { data, error } = await supabase
     .from("posts")
     .select("title, description")
@@ -49,7 +49,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const { data: post, error } = await supabase
     .from("posts")
     .select("title, slug, published_at, author_email, author_image, description, tags, content")

@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
 import { supabase } from '@/lib/supabaseClient'
 import MDEditor, { commands as defaultCommands, ICommand } from '@uiw/react-md-editor'
 import ReactMarkdown from 'react-markdown'
@@ -24,7 +23,6 @@ interface Post {
 export default function Page() {
   const { id } = useParams()
   const router = useRouter()
-  const { theme } = useTheme()
   const [post, setPost] = useState<Post | null>(null)
   const [loading, setLoading] = useState(true)
   const [isPreview, setIsPreview] = useState(false)
@@ -63,7 +61,7 @@ export default function Page() {
           const ext = file.name.split('.').pop()
           const filePath = `${Date.now()}.${ext}`
 
-          const { data: uploadData, error: uploadError } = await supabase
+          const { error: uploadError } = await supabase
             .storage
             .from(bucket)
             .upload(filePath, file)
