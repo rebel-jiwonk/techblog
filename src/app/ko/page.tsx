@@ -1,13 +1,27 @@
-import { getAllPosts } from "@/lib/blog";
+import { getAllSupabasePosts } from "@/lib/supabaseBlog";
 import BlogGrid from "@/components/BlogGrid";
+import type { BlogPost } from "@/types";
 
 export default async function KoreanHome() {
-  const posts = await getAllPosts("ko");
+  const posts = (await getAllSupabasePosts("ko")) as BlogPost[];
 
   return (
     <div className="space-y-24">
       {/* Hero Section */}
-      <section className="space-y-4">
+      <section className="relative h-[500px] overflow-hidden rounded-md">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute w-full h-full object-cover"
+      >
+        <source src="/hero.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-black/40 z-[1]" />
         <h1 className="text-5xl font-bold tracking-tight leading-tight">환영합니다</h1>
         <p className="text-xl text-base-600">
           이 블로그는 리벨리온의 AI 칩 및 시스템 관련 기술 인사이트를 공유합니다.

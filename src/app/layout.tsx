@@ -22,8 +22,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-6 py-12 flex-grow">
-              {children}
+            <main className="flex justify-center px-6 py-12 flex-grow">
+              <div className="w-full max-w-screen-xl">{children}</div>
             </main>
 
             <footer className="border-t border-base-200 dark:border-base-700 mt-24 py-8 text-center text-sm text-base-500 dark:text-base-400">

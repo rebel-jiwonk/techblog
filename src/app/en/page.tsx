@@ -1,19 +1,36 @@
-import { getAllPosts } from "@/lib/blog";
+import { getAllSupabasePosts } from "@/lib/supabaseBlog";
 import BlogGrid from "@/components/BlogGrid";
+import type { BlogPost } from "@/types";
 
 export default async function EnglishHome() {
-  const posts = await getAllPosts("en");
+  const posts = (await getAllSupabasePosts("en")) as BlogPost[];
 
   return (
     <div className="space-y-24">
       {/* Hero Section */}
-      <section className="space-y-4">
-        <h1 className="text-5xl font-bold tracking-tight leading-tight">Welcome</h1>
-        <p className="text-xl text-base-600">
-          This is a tech blog sharing insights from Rebellions — AI chips, systems, and more.
-        </p>
-        <div className="h-1 w-24 bg-accent-green" />
-      </section>
+  <section className="relative h-[500px] overflow-hidden rounded-md">
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="absolute w-full h-full object-cover"
+      >
+        <source src="/hero.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+  {/* Overlay */}
+  <div className="absolute inset-0 bg-black/40 z-[1]" />
+
+  {/* Content */}
+  <div className="relative z-10 text-white p-12">
+    <h1 className="text-5xl font-bold tracking-tight">Rebellions Tech Blog</h1>
+    <p className="text-lg mt-4 max-w-xl">
+      Insights on AI chips, optimization, and deep tech stories from the frontlines.
+    </p>
+  </div>
+</section>
 
       {/* Blog Grid with Filters */}
       <section>

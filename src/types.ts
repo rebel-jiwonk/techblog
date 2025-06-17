@@ -1,10 +1,14 @@
 export type BlogPost = {
-    title: string;
-    slug: string;
-    description: string;
-    date: string;
-    tags: string[];
-    authors: string[];
-    lang: "en" | "ko";
-    content: string;
-  };
+  title: string;
+  slug: string;
+  description: string;
+  date: string;
+  tags: string[];
+  authors: {
+    name: string;
+    image?: string | null;
+  }[];
+  lang: "en" | "ko";
+  content: string;
+  coverImage?: string | null;
+};

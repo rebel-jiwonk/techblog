@@ -1,4 +1,73 @@
-export const AUTHORS: Record<string, { image: string }> = {
+export const AUTHORS: Record<
+  string,
+  { name_en: string; name_ko?: string; image?: string }
+> = {
+  "jiwon.k@rebellions.ai": {
+    name_en: "Jiwon Kwak",
+    name_ko: "곽지원",
+    image: "/authors/hug.png",
+  },
+  "kjlee@rebellions.ai": {
+    name_en: "Jae",
+    name_ko: "이경재",
+    image: "/authors/jae.png",
+  },
+  "paul@rebellions.ai": {
+    name_en: "Paul Kuper",
+    name_ko: "폴 쿠퍼",
+    image: "/authors/paul.png",
+  },
+  "jiwon@rebellions.ai": {
+    name_en: "Hwang Jiwon",
+    name_ko: "황지원",
+    image: "/authors/jiwon.png",
+  },
+  "jieun@rebellions.ai": {
+    name_en: "Lim Ji-eun",
+    name_ko: "임지은",
+    image: "/authors/jieun.png",
+  },
+  "taejun@rebellions.ai": {
+    name_en: "Kong Tae-jun",
+    name_ko: "공태준",
+    image: "/authors/taejun.png",
+  },
+  "gwihyun@rebellions.ai": {
+    name_en: "Jo Gwi-hyun",
+    name_ko: "조귀현",
+    image: "/authors/gwihyun.png",
+  },
+  "jeonguk@rebellions.ai": {
+    name_en: "Kim Jeong-uk",
+    name_ko: "김정욱",
+    image: "/authors/jeonguk.png",
+  },
+  "chanyong@rebellions.ai": {
+    name_en: "Jeon Chan-yong",
+    name_ko: "전찬용",
+    image: "/authors/chanyong.png",
+  },
+  "minjae@rebellions.ai": {
+    name_en: "Kwon Min-jae",
+    name_ko: "권민재",
+    image: "/authors/minjae.png",
+  },
+  "heejun@rebellions.ai": {
+    name_en: "Kim Hee-jun",
+    name_ko: "김희준",
+    image: "/authors/heejun.png",
+  },
+  "hyunwoo@rebellions.ai": {
+    name_en: "Kim Hyun-woo",
+    name_ko: "김현우",
+    image: "/authors/hyunwoo.png",
+  },
+  "jeongsu@rebellions.ai": {
+    name_en: "Lim Jeong-su",
+    name_ko: "임정수",
+    image: "/authors/jeongsu.png",
+  },
+};
     // "Paul Kuper": { image: "/authors/paul.png" },
     // "폴 쿠퍼": { image: "/authors/paul.png" },
     // "황지원": { image: "/authors/jiwon.png" },
@@ -23,7 +92,3 @@ export const AUTHORS: Record<string, { image: string }> = {
     // "김현우": { image: "/authors/hyunwoo.png" },
     // "Lim Jeong-su": { image: "/authors/jeongsu.png" },
     // "임정수": { image: "/authors/jeongsu.png" },
-    "Fisherman": { image: "/authors/hug.png" },
-    "낚시꾼": { image: "/authors/hug.png" },
-
-  };
