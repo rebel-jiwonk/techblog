@@ -6,12 +6,31 @@ import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+const AUTHORS: Record<
+  string,
+  { name_en: string; name_ko?: string; image?: string }
+> = {
+  "jiwon@rebellions.ai": {
+    name_en: "Jiwon Kwak",
+    name_ko: "곽지원",
+    image: "/authors/jiwon.png",
+  },
+  "kjlee@rebellions.ai": {
+    name_en: "Jae",
+    name_ko: "이경재",
+    image: "/authors/jae.png",
+  },
+};
+
 interface Post {
   id: string;
   title: string;
   slug: string;
   published: boolean;
   created_at: string;
+  author_email: string;
+  tags: string[];
+  lang: "en" | "ko";
 }
 
 export default function AdminPage() {
@@ -36,7 +55,7 @@ export default function AdminPage() {
 
       const { data, error: postsError } = await supabase
         .from("posts")
-        .select("id, title, slug, published, created_at")
+        .select("id, title, slug, published, created_at, author_email, tags, lang, description")
         .order("created_at", { ascending: false });
 
       if (!postsError) setPosts(data || []);
@@ -95,7 +114,7 @@ export default function AdminPage() {
               return;
             }
 
-            router.push(`/admin/edit/${data.id}`);
+            router.push(`/admin/posts/${data.id}`);
           }}
           className="text-xs px-2 py-2 bg-black text-white hover:bg-opacity-80"
         >
@@ -115,6 +134,42 @@ export default function AdminPage() {
     <div>
       <h2 className="text-xl font-semibold">{post.title}</h2>
       <p className="text-sm text-gray-500">/{post.slug}</p>
+
+        {/* Author */}
+        {post.author_email && (() => {
+          const author = AUTHORS[post.author_email];
+          const displayName =
+            post.lang === "ko"
+              ? author?.name_ko || author?.name_en || post.author_email
+              : author?.name_en || post.author_email;
+
+          return (
+            <div className="flex items-center gap-2 mt-1">
+              {author?.image && (
+                <img
+                  src={author.image}
+                  alt={displayName}
+                  className="w-5 h-5 rounded-full object-cover"
+                />
+              )}
+              <p className="text-sm text-gray-600">Author: {displayName}</p>
+            </div>
+          );
+        })()}
+        
+        {post.tags?.length > 0 && (
+          <div className="flex flex-wrap gap-1 mt-1">
+            {post.tags.map((tag, i) => (
+              <span
+                key={i}
+                className="text-xs px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+    
     </div>
     <div className="flex gap-3 items-center">
       <span

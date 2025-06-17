@@ -76,7 +76,9 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       </div>
 
-      <p className="text-sm text-base-500 mb-4">{new Date(post.published_at).toLocaleDateString()}</p>
+      <p className="text-sm text-base-500 mb-4">{new Date(post.published_at).toLocaleDateString("en-US", {
+  year: "numeric", month: "short", day: "numeric"
+})}</p>
 
       <div className="flex flex-wrap gap-2 mb-6">
         {post.tags?.map((tag: string, i: number) => (

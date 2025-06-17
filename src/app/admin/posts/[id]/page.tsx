@@ -17,10 +17,12 @@ interface Post {
   lang: 'en' | 'ko'
   published: boolean
   author_email: string
+  tags: string[]
+  description?: string
 }
 
 export default function Page() {
-  const params = useParams()
+  const { id } = useParams()
   const router = useRouter()
   const { theme } = useTheme()
   const [post, setPost] = useState<Post | null>(null)
@@ -28,7 +30,7 @@ export default function Page() {
   const [isPreview, setIsPreview] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const bucket = 'blog-assets' // ✅ your real bucket name
+  const bucket = 'blog-assets'
 
   const customImageCommand: ICommand = {
     name: 'image',
@@ -61,15 +63,12 @@ export default function Page() {
           const ext = file.name.split('.').pop()
           const filePath = `${Date.now()}.${ext}`
 
-          console.log('📤 Uploading to:', bucket, '→', filePath)
-
           const { data: uploadData, error: uploadError } = await supabase
             .storage
             .from(bucket)
             .upload(filePath, file)
 
           if (uploadError) {
-            console.error('❌ Upload failed:', uploadError.message)
             alert('Upload failed: ' + uploadError.message)
             return
           }
@@ -80,8 +79,6 @@ export default function Page() {
             .getPublicUrl(filePath)
 
           const publicUrl = publicData?.publicUrl
-          console.log('🧾 Public URL:', publicUrl)
-
           if (!publicUrl) {
             alert('Error generating public URL')
             return
@@ -107,7 +104,7 @@ export default function Page() {
       const { data, error } = await supabase
         .from('posts')
         .select('*')
-        .eq('id', params.id)
+        .eq('id', id)
         .single()
 
       if (error) {
@@ -120,7 +117,7 @@ export default function Page() {
     }
 
     loadPost()
-  }, [params.id, router])
+  }, [id, router])
 
   if (loading) return <div className="p-4">Loading...</div>
   if (!post) return <div className="p-4">Post not found</div>
@@ -134,6 +131,8 @@ export default function Page() {
         slug: post.slug,
         lang: post.lang,
         published: post.published,
+        tags: post.tags,
+        author_email: post.author_email,
       })
       .eq('id', post.id)
 
@@ -148,13 +147,13 @@ export default function Page() {
   return (
     <div className="max-w-screen-xl w-full mx-auto px-8 py-6 space-y-6">
       <div className="flex justify-between items-center">
-      <div className="flex justify-between items-center mb-4">
-        <button
+        <div className="flex justify-between items-center mb-4">
+          <button
             onClick={() => router.push('/admin')}
             className="text-sm text-gray-600 hover:text-black hover:underline flex items-center gap-1"
-        >
+          >
             ← Back to Dashboard
-        </button>
+          </button>
         </div>
         <h1 className="text-2xl font-bold">Edit Post</h1>
         <div className="flex items-center gap-4">
@@ -175,7 +174,9 @@ export default function Page() {
 
       {!isPreview ? (
         <div className="space-y-4">
-          <div>
+        {/* Title + Author Email */}
+        <div className="flex gap-4">
+          <div className="w-1/2">
             <label className="block text-sm font-medium mb-1">Title</label>
             <input
               type="text"
@@ -184,18 +185,31 @@ export default function Page() {
               className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
             />
           </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Slug</label>
+          <div className="w-1/2">
+            <label className="block text-sm font-medium mb-1">Author Email</label>
             <input
-              type="text"
-              value={post.slug}
-              onChange={(e) => setPost({ ...post, slug: e.target.value })}
+              type="email"
+              value={post.author_email || ''}
+              onChange={(e) => setPost({ ...post, author_email: e.target.value })}
               className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
             />
           </div>
-
-          <div>
+        </div>
+      
+        {/* Description */}
+        <div>
+          <label className="block text-sm font-medium mb-1">Description (Summary)</label>
+          <textarea
+            value={post.description || ""}
+            onChange={(e) => setPost({ ...post, description: e.target.value })}
+            className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
+            rows={3}
+          />
+        </div>
+      
+        {/* Language + Tags + Slug */}
+        <div className="flex gap-4">
+          <div className="w-1/3">
             <label className="block text-sm font-medium mb-1">Language</label>
             <select
               value={post.lang}
@@ -206,19 +220,37 @@ export default function Page() {
               <option value="ko">Korean</option>
             </select>
           </div>
+          <div className="w-1/3">
+            <label className="block text-sm font-medium mb-1">Tags (comma-separated)</label>
+            <input
+              type="text"
+              value={post.tags?.join(', ') || ''}
+              onChange={(e) => setPost({ ...post, tags: e.target.value.split(',').map(tag => tag.trim()) })}
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
+            />
+          </div>
+          <div className="w-1/3">
+            <label className="block text-sm font-medium mb-1">Slug</label>
+            <input
+              type="text"
+              value={post.slug}
+              onChange={(e) => setPost({ ...post, slug: e.target.value })}
+              className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
+            />
+          </div>
+        </div>
 
           <div>
             <label className="block text-sm font-medium mb-1">Content</label>
             <div className="border rounded overflow-hidden" style={{ height: '600px' }}>
-                <MDEditor
-                    value={post.content}
-                    onChange={(value) => setPost({ ...post, content: value || '' })}
-                    commands={[...commandList, customImageCommand]}
-                    height="100%"
-                />
+              <MDEditor
+                value={post.content}
+                onChange={(value) => setPost({ ...post, content: value || '' })}
+                commands={[...commandList, customImageCommand]}
+                height="100%"
+              />
             </div>
           </div>
-
         </div>
       ) : (
         <article className="prose prose-lg dark:prose-invert max-w-none prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
@@ -241,7 +273,6 @@ export default function Page() {
         </article>
       )}
 
-      {/* Hidden input for file selection */}
       <input ref={inputRef} type="file" accept="image/*" className="hidden" />
     </div>
   )
