@@ -1,8 +1,9 @@
-import { getAllPosts } from "@/lib/blog";
+import { getAllSupabasePosts } from "@/lib/supabaseBlog";
 import BlogGrid from "@/components/BlogGrid";
+import type { BlogPost } from "@/types";
 
 export default async function KoreanHome() {
-  const posts = await getAllPosts("ko");
+  const posts = (await getAllSupabasePosts("ko")) as BlogPost[];
 
   return (
     <div className="space-y-24">

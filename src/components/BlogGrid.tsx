@@ -42,7 +42,9 @@ export default function BlogGrid({
 
   const filteredPosts = initialPosts.filter((post) => {
     const tagMatch = filterByTag ? post.tags.includes(filterByTag) : true;
-    const authorMatch = filterByAuthor ? post.authors.includes(filterByAuthor) : true;
+    const authorMatch = filterByAuthor
+  ? post.authors.some((a) => a.name === filterByAuthor)
+  : true;
     return tagMatch && authorMatch;
   });
 
@@ -81,21 +83,21 @@ export default function BlogGrid({
                 <span className="flex flex-wrap items-center gap-2">
                   ·{" "}
                   {post.authors.map((author, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setFilterByAuthor(author)}
-                      className="flex items-center gap-1 hover:text-accent-green text-xs"
-                    >
-                      {AUTHORS[author]?.image && (
-                        <img
-                          src={AUTHORS[author].image}
-                          alt={author}
-                          className="w-6 h-6 object-cover rounded-full"
-                        />
-                      )}
-                      <span>{author}</span>
-                    </button>
-                  ))}
+                  <button
+                    key={i}
+                    onClick={() => setFilterByAuthor(author.name)}
+                    className="flex items-center gap-1 hover:text-accent-green text-xs"
+                  >
+                    {AUTHORS[author.name]?.image && (
+                      <img
+                        src={AUTHORS[author.name].image}
+                        alt={author.name}
+                        className="w-6 h-6 object-cover rounded-full"
+                      />
+                    )}
+                    <span>{author.name}</span>
+                  </button>
+                ))}
                 </span>
               )}
             </p>

@@ -52,16 +52,16 @@ export default async function BlogPostPage({ params }: PageProps) {
 
       {/* Authors */}
       <div className="flex items-center gap-4 mb-2">
-        {post.authors?.map((author, i) => (
+      {post.authors.map((author, i) => (
           <div key={i} className="flex items-center gap-2 text-sm text-base-500">
-            {AUTHORS[author]?.image && (
+            {AUTHORS[author.name]?.image && (
               <img
-                src={AUTHORS[author].image}
-                alt={author}
+                src={AUTHORS[author.name].image}
+                alt={author.name}
                 className="w-7 h-7 object-cover rounded-full"
               />
             )}
-            <span>{author}</span>
+            <span>{author.name}</span>
           </div>
         ))}
       </div>
