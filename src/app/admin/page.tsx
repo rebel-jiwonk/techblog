@@ -5,22 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
-const AUTHORS: Record<
-  string,
-  { name_en: string; name_ko?: string; image?: string }
-> = {
-  "jiwon@rebellions.ai": {
-    name_en: "Jiwon Kwak",
-    name_ko: "곽지원",
-    image: "/authors/jiwon.png",
-  },
-  "kjlee@rebellions.ai": {
-    name_en: "Jae",
-    name_ko: "이경재",
-    image: "/authors/jae.png",
-  },
-};
+import { AUTHORS } from "@/lib/authors";
 
 interface Post {
   id: string;
@@ -68,6 +53,21 @@ export default function AdminPage() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/admin/login");
+  };
+
+  const togglePublish = async (post: Post) => {
+    const { error } = await supabase
+      .from("posts")
+      .update({ published: !post.published })
+      .eq("id", post.id);
+
+    if (!error) {
+      setPosts((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, published: !p.published } : p))
+      );
+    } else {
+      alert("Failed to update publish status: " + error.message);
+    }
   };
 
   return (
@@ -126,88 +126,96 @@ export default function AdminPage() {
         <p>Loading posts...</p>
       ) : (
         <div className="space-y-4">
-          {posts.map((post) => (
-  <div
-    key={post.id}
-    className="border border-gray-300 p-4 shadow-sm flex items-center justify-between"
-  >
-    <div>
-      <h2 className="text-xl font-semibold">{post.title}</h2>
-      <p className="text-sm text-gray-500">/{post.slug}</p>
+          {posts.map((post) => {
+            const author = AUTHORS[post.author_email];
+            const displayName =
+              post.lang === "ko"
+                ? author?.name_ko || author?.name_en || post.author_email
+                : author?.name_en || post.author_email;
 
-        {/* Author */}
-        {post.author_email && (() => {
-          const author = AUTHORS[post.author_email];
-          const displayName =
-            post.lang === "ko"
-              ? author?.name_ko || author?.name_en || post.author_email
-              : author?.name_en || post.author_email;
-
-          return (
-            <div className="flex items-center gap-2 mt-1">
-              {author?.image && (
-                <img
-                  src={author.image}
-                  alt={displayName}
-                  className="w-5 h-5 rounded-full object-cover"
-                />
-              )}
-              <p className="text-sm text-gray-600">Author: {displayName}</p>
-            </div>
-          );
-        })()}
-        
-        {post.tags?.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-1">
-            {post.tags.map((tag, i) => (
-              <span
-                key={i}
-                className="text-xs px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full"
+            return (
+              <div
+                key={post.id}
+                className="border border-gray-300 p-4 shadow-sm flex items-center justify-between"
               >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
-    
-    </div>
-    <div className="flex gap-3 items-center">
-      <span
-        className={`text-xs px-2 py-1 font-mono uppercase ${
-          post.published
-            ? "bg-green-100 text-green-700"
-            : "bg-yellow-100 text-yellow-700"
-        }`}
-      >
-        {post.published ? "Published" : "Draft"}
-            </span>
-            <Link
-                href={`/admin/posts/${post.id}`}
-                className="text-xs px-2 py-1 border border-gray-400 hover:bg-gray-100"
-            >
-                Edit
-            </Link>
-            <button
-                onClick={async () => {
-                const confirmDelete = confirm("Are you sure you want to delete this post?");
-                if (!confirmDelete) return;
+                <div>
+                  <Link
+                    href={`/${post.lang}/blog/${post.slug}`}
+                    title="Go to post?"
+                    className="hover:underline"
+                  >
+                    <h2 className="text-xl font-semibold cursor-pointer">{post.title}</h2>
+                  </Link>
 
-                const { error } = await supabase.from("posts").delete().eq("id", post.id);
-                if (error) {
-                    alert("Failed to delete: " + error.message);
-                    return;
-                }
+                  <div className="flex items-center gap-2 mt-1">
+                    {author?.image && (
+                      <img
+                        src={author.image}
+                        alt={displayName}
+                        className="w-5 h-5 rounded-full object-cover"
+                      />
+                    )}
+                    <p className="text-sm text-gray-600">Author: {displayName}</p>
+                  </div>
 
-                // Remove from local state
-                setPosts((prev) => prev.filter((p) => p.id !== post.id));
-                }}
-                className="text-xs px-2 py-1 border border-red-300 text-red-600 hover:bg-red-100"
-            >
-                Delete
-            </button>
-            </div>
-        </div>
-        ))}
+                  {post.tags?.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {post.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className="text-xs px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-3 items-center">
+                  <span
+                    className={`text-xs px-2 py-1 font-mono uppercase ${
+                      post.published
+                        ? "bg-green-100 text-green-700"
+                        : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {post.published ? "Published" : "Draft"}
+                  </span>
+
+                  <button
+                    onClick={() => togglePublish(post)}
+                    className="text-xs px-2 py-1 border border-blue-300 text-blue-600 hover:bg-blue-100"
+                  >
+                    {post.published ? "Unpublish" : "Publish"}
+                  </button>
+
+                  <Link
+                    href={`/admin/posts/${post.id}`}
+                    className="text-xs px-2 py-1 border border-gray-400 hover:bg-gray-100"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      const confirmDelete = confirm("Are you sure you want to delete this post?");
+                      if (!confirmDelete) return;
+
+                      const { error } = await supabase.from("posts").delete().eq("id", post.id);
+                      if (error) {
+                        alert("Failed to delete: " + error.message);
+                        return;
+                      }
+
+                      setPosts((prev) => prev.filter((p) => p.id !== post.id));
+                    }}
+                    className="text-xs px-2 py-1 border border-red-300 text-red-600 hover:bg-red-100"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
