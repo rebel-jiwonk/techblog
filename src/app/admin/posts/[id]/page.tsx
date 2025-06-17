@@ -219,14 +219,34 @@ export default function Page() {
             </select>
           </div>
           <div className="w-1/3">
-            <label className="block text-sm font-medium mb-1">Tags (comma-separated)</label>
-            <input
-              type="text"
-              value={post.tags?.join(', ') || ''}
-              onChange={(e) => setPost({ ...post, tags: e.target.value.split(',').map(tag => tag.trim()) })}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
-            />
+          <label className="block text-sm font-medium mb-1">Tags</label>
+          <div className="flex flex-wrap gap-2">
+            {(post.lang === "ko"
+              ? ["퍼포먼스", "솔루션", "최적화", "하드웨어", "툴", "양자화"]
+              : ["Performance", "Solution", "Optimization", "Hardware", "Tools", "Quantization"]
+            ).map((tag) => (
+              <button
+                type="button"
+                key={tag}
+                onClick={() =>
+                  setPost({
+                    ...post,
+                    tags: (post.tags || []).includes(tag)
+                        ? post.tags.filter((t: string) => t !== tag)
+                        : [...(post.tags || []), tag],
+                  })
+                }
+                className={`px-3 py-1 text-sm border rounded-full ${
+                  (post.tags || []).includes(tag)
+                    ? "bg-black text-white"
+                    : "bg-gray-100 text-gray-700"
+                }`}
+              >
+                #{tag}
+              </button>
+            ))}
           </div>
+        </div>
           <div className="w-1/3">
             <label className="block text-sm font-medium mb-1">Slug</label>
             <input
