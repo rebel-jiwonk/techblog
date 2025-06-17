@@ -10,4 +10,5 @@ export type BlogPost = {
   }[];
   lang: "en" | "ko";
   content: string;
+  coverImage?: string | null;
 };

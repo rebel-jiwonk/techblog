@@ -1,14 +1,14 @@
-import { getPost, getAllPosts } from "@/lib/blog"; // Assume getAllPosts fetches all post metadata
+import { getAllSupabasePosts } from "@/lib/supabaseBlog";
+import { supabase } from "@/lib/supabaseClient";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
+import rehypeRaw from "rehype-raw";
 import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
-import rehypeRaw from "rehype-raw";
 
-// Define the params type for the page
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
 const tagColors: Record<string, string> = {
@@ -27,51 +27,59 @@ const tagColors: Record<string, string> = {
 };
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts("en");
+  const posts = await getAllSupabasePosts("en");
   return posts.map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getPost("en", slug);
+  const { slug } = params;
+  const { data, error } = await supabase
+    .from("posts")
+    .select("title, description")
+    .eq("slug", slug)
+    .eq("lang", "en")
+    .single();
+
+  if (error || !data) return notFound();
+
   return {
-    title: post.title,
-    description: post.description,
+    title: data.title,
+    description: data.description,
   };
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = await params;
-  const post = await getPost("en", slug);
-  if (!post) return notFound();
+  const { slug } = params;
+  const { data: post, error } = await supabase
+    .from("posts")
+    .select("title, slug, published_at, author_email, author_image, description, tags, content")
+    .eq("slug", slug)
+    .eq("lang", "en")
+    .eq("published", true)
+    .single();
+
+  if (error || !post) return notFound();
 
   return (
     <article className="prose prose-lg max-w-none text-base-800 dark:text-base-50">
-      {/* Title */}
       <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
-
-      {/* Authors */}
       <div className="flex items-center gap-4 mb-2">
-      {post.authors.map((author, i) => (
-          <div key={i} className="flex items-center gap-2 text-sm text-base-500">
-            {AUTHORS[author.name]?.image && (
-              <img
-                src={AUTHORS[author.name].image}
-                alt={author.name}
-                className="w-7 h-7 object-cover rounded-full"
-              />
-            )}
-            <span>{author.name}</span>
-          </div>
-        ))}
+        <div className="flex items-center gap-2 text-sm text-base-500">
+          {AUTHORS[post.author_email]?.image && (
+            <img
+              src={AUTHORS[post.author_email].image}
+              alt={post.author_email}
+              className="w-7 h-7 object-cover rounded-full"
+            />
+          )}
+          <span>{post.author_email}</span>
+        </div>
       </div>
 
-      {/* Date */}
-      <p className="text-sm text-base-500 mb-4">{post.date}</p>
+      <p className="text-sm text-base-500 mb-4">{new Date(post.published_at).toLocaleDateString()}</p>
 
-      {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-6">
-        {post.tags?.map((tag, i) => (
+        {post.tags?.map((tag: string, i: number) => (
           <span
             key={i}
             className={`text-xs font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
@@ -82,25 +90,24 @@ export default async function BlogPostPage({ params }: PageProps) {
         ))}
       </div>
 
-      {/* Content */}
       <div className="prose prose-lg dark:prose-invert max-w-none
               prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
               prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
-              <ReactMarkdown
-                  remarkPlugins={[remarkBreaks]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    img: ({ ...props }) => (
-                      <img
-                        {...props}
-                        className="rounded-md my-4 w-full max-w-full object-contain"
-                        alt={props.alt || ""}
-                      />
-                    ),
-                  }}
-                >
-                {post.content}
-              </ReactMarkdown>
+        <ReactMarkdown
+          remarkPlugins={[remarkBreaks]}
+          rehypePlugins={[rehypeRaw]}
+          components={{
+            img: ({ ...props }) => (
+              <img
+                {...props}
+                className="rounded-md my-4 w-full max-w-full object-contain"
+                alt={props.alt || ""}
+              />
+            ),
+          }}
+        >
+          {post.content}
+        </ReactMarkdown>
       </div>
     </article>
   );
