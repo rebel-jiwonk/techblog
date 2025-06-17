@@ -1,4 +1,18 @@
-export const AUTHORS: Record<string, { image: string }> = {
+export const AUTHORS: Record<
+  string,
+  { name_en: string; name_ko?: string; image?: string }
+> = {
+  "jiwon.k@rebellions.ai": {
+    name_en: "Jiwon Kwak",
+    name_ko: "곽지원",
+    image: "/authors/hug.png",
+  },
+  "kjlee@rebellions.ai": {
+    name_en: "Jae",
+    name_ko: "이경재",
+    image: "/authors/jae.png",
+  },
+};
     // "Paul Kuper": { image: "/authors/paul.png" },
     // "폴 쿠퍼": { image: "/authors/paul.png" },
     // "황지원": { image: "/authors/jiwon.png" },
@@ -23,7 +37,3 @@ export const AUTHORS: Record<string, { image: string }> = {
     // "김현우": { image: "/authors/hyunwoo.png" },
     // "Lim Jeong-su": { image: "/authors/jeongsu.png" },
     // "임정수": { image: "/authors/jeongsu.png" },
-    "Fisherman": { image: "/authors/hug.png" },
-    "낚시꾼": { image: "/authors/hug.png" },
-
-  };
