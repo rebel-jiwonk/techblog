@@ -175,7 +175,7 @@ export default function Page() {
         {/* Title + Author Email */}
         <div className="flex gap-4">
           <div className="w-1/2">
-            <label className="block text-sm font-medium mb-1">Title</label>
+            <label className="block text-sm font-bold mb-1">TITLE</label>
             <input
               type="text"
               value={post.title}
@@ -184,7 +184,7 @@ export default function Page() {
             />
           </div>
           <div className="w-1/2">
-            <label className="block text-sm font-medium mb-1">Author Email</label>
+            <label className="block text-sm font-medium mb-1">AUTHOR EMAIL</label>
             <input
               type="email"
               value={post.author_email || ''}
@@ -196,7 +196,7 @@ export default function Page() {
       
         {/* Description */}
         <div>
-          <label className="block text-sm font-medium mb-1">Description (Summary)</label>
+          <label className="block text-sm font-bold mb-1">SUMMARY</label>
           <textarea
             value={post.description || ""}
             onChange={(e) => setPost({ ...post, description: e.target.value })}
@@ -208,7 +208,7 @@ export default function Page() {
         {/* Language + Tags + Slug */}
         <div className="flex gap-4">
           <div className="w-1/3">
-            <label className="block text-sm font-medium mb-1">Language</label>
+            <label className="block text-sm font-bold mb-1">LANGUAGE</label>
             <select
               value={post.lang}
               onChange={(e) => setPost({ ...post, lang: e.target.value as 'en' | 'ko' })}
@@ -219,7 +219,7 @@ export default function Page() {
             </select>
           </div>
           <div className="w-1/3">
-          <label className="block text-sm font-medium mb-1">Tags</label>
+          <label className="block text-sm font-bold mb-1">TAGS</label>
           <div className="flex flex-wrap gap-2">
             {(post.lang === "ko"
               ? ["퍼포먼스", "솔루션", "최적화", "하드웨어", "툴", "양자화"]
@@ -236,7 +236,7 @@ export default function Page() {
                         : [...(post.tags || []), tag],
                   })
                 }
-                className={`px-3 py-1 text-sm border rounded-full ${
+                className={`px-2 py-1 text-sm border ${
                   (post.tags || []).includes(tag)
                     ? "bg-black text-white"
                     : "bg-gray-100 text-gray-700"
@@ -248,7 +248,7 @@ export default function Page() {
           </div>
         </div>
           <div className="w-1/3">
-            <label className="block text-sm font-medium mb-1">Slug</label>
+            <label className="block text-sm font-medium mb-1">SLUG</label>
             <input
               type="text"
               value={post.slug}
@@ -259,7 +259,7 @@ export default function Page() {
         </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Content</label>
+            <label className="block text-sm font-medium mb-1">CONTENT</label>
             <div className="border rounded overflow-hidden" style={{ height: '600px' }}>
               <MDEditor
                 value={post.content}
