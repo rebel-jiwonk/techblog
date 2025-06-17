@@ -34,7 +34,23 @@ export default function Page() {
     name: 'image',
     keyCommand: 'image',
     buttonProps: { 'aria-label': 'Insert image' },
-    icon: <span>Image</span>,
+    icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="2" width="18" height="16" rx="2" ry="2" />
+          <circle cx="8.5" cy="7.5" r="1.5" />
+          <path d="M21 13.8l-5-5L5 18" />
+        </svg>
+      ),
     execute: (state, api) => {
       if (inputRef.current) {
         inputRef.current.click()
