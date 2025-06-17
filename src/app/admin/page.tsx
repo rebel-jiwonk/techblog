@@ -97,7 +97,7 @@ export default function AdminPage() {
 
             router.push(`/admin/edit/${data.id}`);
           }}
-          className="text-sm px-4 py-2 bg-black text-white rounded hover:bg-opacity-80"
+          className="text-xs px-2 py-2 bg-black text-white hover:bg-opacity-80"
         >
           + Create New Post
         </button>
@@ -108,33 +108,51 @@ export default function AdminPage() {
       ) : (
         <div className="space-y-4">
           {posts.map((post) => (
-            <div
-              key={post.id}
-              className="border border-gray-300 p-4 rounded-md shadow-sm flex items-center justify-between"
+  <div
+    key={post.id}
+    className="border border-gray-300 p-4 shadow-sm flex items-center justify-between"
+  >
+    <div>
+      <h2 className="text-xl font-semibold">{post.title}</h2>
+      <p className="text-sm text-gray-500">/{post.slug}</p>
+    </div>
+    <div className="flex gap-3 items-center">
+      <span
+        className={`text-xs px-2 py-1 font-mono uppercase ${
+          post.published
+            ? "bg-green-100 text-green-700"
+            : "bg-yellow-100 text-yellow-700"
+        }`}
+      >
+        {post.published ? "Published" : "Draft"}
+            </span>
+            <Link
+                href={`/admin/posts/${post.id}`}
+                className="text-xs px-2 py-1 border border-gray-400 hover:bg-gray-100"
             >
-              <div>
-                <h2 className="text-xl font-semibold">{post.title}</h2>
-                <p className="text-sm text-gray-500">/{post.slug}</p>
-              </div>
-              <div className="flex gap-3 items-center">
-                <span
-                  className={`text-xs px-2 py-1 rounded-full font-mono uppercase ${
-                    post.published
-                      ? "bg-green-100 text-green-700"
-                      : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {post.published ? "Published" : "Draft"}
-                </span>
-                <Link
-                  href={`/admin/posts/${post.id}`}
-                  className="text-sm px-3 py-1 border border-gray-400 hover:bg-gray-100 rounded"
-                >
-                  Edit
-                </Link>
-              </div>
+                Edit
+            </Link>
+            <button
+                onClick={async () => {
+                const confirmDelete = confirm("Are you sure you want to delete this post?");
+                if (!confirmDelete) return;
+
+                const { error } = await supabase.from("posts").delete().eq("id", post.id);
+                if (error) {
+                    alert("Failed to delete: " + error.message);
+                    return;
+                }
+
+                // Remove from local state
+                setPosts((prev) => prev.filter((p) => p.id !== post.id));
+                }}
+                className="text-xs px-2 py-1 border border-red-300 text-red-600 hover:bg-red-100"
+            >
+                Delete
+            </button>
             </div>
-          ))}
+        </div>
+        ))}
         </div>
       )}
     </div>

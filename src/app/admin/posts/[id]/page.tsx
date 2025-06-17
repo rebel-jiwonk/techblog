@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
@@ -146,19 +146,27 @@ export default function Page() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="max-w-screen-xl w-full mx-auto px-8 py-6 space-y-6">
       <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-4">
+        <button
+            onClick={() => router.push('/admin')}
+            className="text-sm text-gray-600 hover:text-black hover:underline flex items-center gap-1"
+        >
+            ← Back to Dashboard
+        </button>
+        </div>
         <h1 className="text-2xl font-bold">Edit Post</h1>
         <div className="flex items-center gap-4">
           <button
             onClick={() => setIsPreview(!isPreview)}
-            className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50"
+            className="px-2 py-2 border text-xs border-gray-300 hover:bg-gray-50"
           >
             {isPreview ? 'Edit' : 'Preview'}
           </button>
           <button
             onClick={handleSave}
-            className="px-4 py-2 bg-black text-white rounded hover:bg-opacity-80"
+            className="px-2 py-2 bg-black text-xs text-white hover:bg-opacity-80"
           >
             Save Changes
           </button>
@@ -201,26 +209,16 @@ export default function Page() {
 
           <div>
             <label className="block text-sm font-medium mb-1">Content</label>
-            <div className="border rounded">
-              <MDEditor
-                value={post.content}
-                onChange={(value) => setPost({ ...post, content: value || '' })}
-                commands={[...commandList, customImageCommand]}
-              />
+            <div className="border rounded overflow-hidden" style={{ height: '600px' }}>
+                <MDEditor
+                    value={post.content}
+                    onChange={(value) => setPost({ ...post, content: value || '' })}
+                    commands={[...commandList, customImageCommand]}
+                    height="100%"
+                />
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="published"
-              checked={post.published}
-              onChange={(e) => setPost({ ...post, published: e.target.checked })}
-            />
-            <label htmlFor="published" className="text-sm font-medium">
-              Published
-            </label>
-          </div>
         </div>
       ) : (
         <article className="prose prose-lg dark:prose-invert max-w-none prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
