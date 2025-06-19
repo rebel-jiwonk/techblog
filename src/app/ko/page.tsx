@@ -9,24 +9,27 @@ export default async function KoreanHome() {
     <div className="space-y-24">
       {/* Hero Section */}
       <section className="relative h-[500px] overflow-hidden rounded-md">
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute w-full h-full object-cover"
-      >
-        <source src="/hero.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute w-full h-full object-cover"
+        >
+          <source src="/hero.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
 
-  {/* Overlay */}
-  <div className="absolute inset-0 bg-black/40 z-[1]" />
-        <h1 className="text-5xl font-bold tracking-tight leading-tight">환영합니다</h1>
-        <p className="text-xl text-base-600">
-          이 블로그는 리벨리온의 AI 칩 및 시스템 관련 기술 인사이트를 공유합니다.
-        </p>
-        <div className="h-1 w-24 bg-accent-green" />
+        {/* Black overlay */}
+        <div className="absolute inset-0 bg-black/40 z-[1]" />
+
+        {/* Content */}
+        <div className="relative z-10 text-white p-12">
+          <h1 className="text-5xl font-bold tracking-tight leading-tight">환영합니다</h1>
+          <p className="text-xl mt-4 max-w-xl">
+            이 블로그는 리벨리온의 AI 칩 및 시스템 관련 기술 인사이트를 공유합니다.
+          </p>
+        </div>
       </section>
 
       {/* Blog Grid with Filters */}

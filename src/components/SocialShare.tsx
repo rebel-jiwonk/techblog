@@ -1,4 +1,3 @@
-// components/SocialShare.tsx
 "use client";
 
 type Props = {
@@ -15,7 +14,9 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         rel="noopener noreferrer"
         className="flex items-center gap-2 hover:underline"
       >
-        <img src="/linkedin.svg" alt="LinkedIn" className="w-4 h-4" />
+        <span className="bg-white p-1 rounded">
+          <img src="/linkedin.svg" alt="LinkedIn" className="w-4 h-4" />
+        </span>
         LinkedIn
       </a>
 
@@ -25,7 +26,9 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         rel="noopener noreferrer"
         className="flex items-center gap-2 hover:underline"
       >
-        <img src="/X.svg" alt="X" className="w-4 h-4" />
+        <span className="bg-white p-1 rounded">
+          <img src="/X.svg" alt="X" className="w-4 h-4" />
+        </span>
         X
       </a>
 
@@ -36,7 +39,9 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         }}
         className="flex items-center gap-2 hover:underline"
       >
-        <img src="/create-link.svg" alt="Copy link" className="w-4 h-4" />
+        <span className="bg-white p-1 rounded">
+          <img src="/create-link.svg" alt="Copy link" className="w-4 h-4" />
+        </span>
         Link
       </button>
     </div>
