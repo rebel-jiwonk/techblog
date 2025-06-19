@@ -6,6 +6,7 @@ import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
 import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
+import SocialShare from "@/components/SocialShare";
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -60,29 +61,33 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   if (error || !post) return notFound();
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rbln-techblog.netlify.app";
+  const postUrl = `${baseUrl}/blog/${post.slug}`;
+
   return (
-      <article className="prose prose-lg max-w-none text-base-800 dark:text-base-50">
-        <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
-        <div className="flex items-center gap-4 mb-2">
-          <div className="flex items-center gap-2 text-sm text-base-500">
-            {AUTHORS[post.author_email]?.image && (
-              <img
-                src={AUTHORS[post.author_email].image}
-                alt={post.author_email}
-                className="w-7 h-7 object-cover rounded-full"
-              />
-            )}
-             <span>
-              {AUTHORS[post.author_email]?.name_ko || post.author_email}
-            </span>
-          </div>
+      <article className="prose prose-lg max-w-3xl mx-auto text-base-800 dark:text-base-50 text-center">
+        <h1 className="text-5xl font-extrabold mt-8 mb-4">{post.title}</h1>
+      
+        <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
+          {AUTHORS[post.author_email]?.image && (
+            <img
+              src={AUTHORS[post.author_email].image}
+              alt={post.author_email}
+              className="w-8 h-8 object-cover rounded-full"
+            />
+          )}
+          <span>{AUTHORS[post.author_email]?.name_ko || post.author_email}</span>
+          <span>•</span>
+          <span>
+            {new Date(post.published_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
         </div>
-  
-        <p className="text-sm text-base-500 mb-4">{new Date(post.published_at).toLocaleDateString("en-US", {
-  year: "numeric", month: "short", day: "numeric"
-})}</p>
-  
-        <div className="flex flex-wrap gap-2 mb-6">
+      
+        <div className="flex justify-center flex-wrap gap-2 mb-4">
           {post.tags?.map((tag: string, i: number) => (
             <span
               key={i}
@@ -93,10 +98,13 @@ export default async function BlogPostPage({ params }: PageProps) {
             </span>
           ))}
         </div>
-  
-        <div className="prose prose-lg dark:prose-invert max-w-none
-                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
-                prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
+      
+        {/* Social share links */}
+        <SocialShare postUrl={postUrl} postTitle={post.title} />
+      
+        <div className="prose prose-lg dark:prose-invert max-w-none mx-auto text-left
+                    prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
+                    prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
           <ReactMarkdown
             remarkPlugins={[remarkBreaks]}
             rehypePlugins={[rehypeRaw]}
@@ -114,5 +122,5 @@ export default async function BlogPostPage({ params }: PageProps) {
           </ReactMarkdown>
         </div>
       </article>
-    );
-  }
+        );
+      }

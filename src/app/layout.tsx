@@ -34,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   rel="noopener noreferrer"
                   className="hover:underline"
                 >
-                  Rebellions.ai
+                  Website
                 </a>
               </div>
 
