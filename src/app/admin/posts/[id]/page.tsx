@@ -7,6 +7,7 @@ import MDEditor, { commands as defaultCommands, ICommand } from '@uiw/react-md-e
 import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
 import rehypeRaw from 'rehype-raw'
+import { ComponentPropsWithoutRef } from "react";
 
 interface Post {
   id: string
@@ -131,6 +132,7 @@ export default function Page() {
         published: post.published,
         tags: post.tags,
         author_email: post.author_email,
+        description: post.description,
       })
       .eq('id', post.id)
 
@@ -174,15 +176,16 @@ export default function Page() {
         <div className="space-y-4">
         {/* Title + Author Email */}
         <div className="flex gap-4">
-          <div className="w-1/2">
-            <label className="block text-sm font-bold mb-1">TITLE</label>
-            <input
-              type="text"
-              value={post.title}
-              onChange={(e) => setPost({ ...post, title: e.target.value })}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-black"
-            />
-          </div>
+        <div className="w-1/2">
+          <label className="block text-sm font-bold mb-1">TITLE</label>
+          <textarea
+            value={post.title}
+            onChange={(e) => setPost({ ...post, title: e.target.value })}
+            rows={3}
+            className="w-full p-2 border rounded resize-none focus:ring-2 focus:ring-black"
+            placeholder="Enter title with line breaks"
+          />
+        </div>
           <div className="w-1/2">
             <label className="block text-sm font-medium mb-1">AUTHOR EMAIL</label>
             <input
@@ -272,22 +275,80 @@ export default function Page() {
         </div>
       ) : (
         <article className="prose prose-lg dark:prose-invert max-w-none prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
-          <h1 className="text-4xl font-bold mb-2">{post.title}</h1>
-          <ReactMarkdown
-            remarkPlugins={[remarkBreaks]}
-            rehypePlugins={[rehypeRaw]}
-            components={{
-              img: ({ ...props }) => (
-                <img
-                  {...props}
-                  className="rounded-md my-4 w-full max-w-full object-contain"
-                  alt={props.alt || ''}
-                />
-              ),
-            }}
-          >
-            {post.content}
-          </ReactMarkdown>
+                    <h1 className="text-4xl font-bold mb-7 text-center leading-tight">
+                {post.title.split("\n").map((line, i) => (
+                  <span key={i} className="block mb-2">
+                    {line}
+                  </span>
+                ))}
+              </h1>
+              <ReactMarkdown
+                remarkPlugins={[remarkBreaks]}
+                rehypePlugins={[rehypeRaw]}
+                components={{
+                  img: ({ alt, src }) => (
+                    <img
+                      src={src ?? ""}
+                      alt={alt ?? ""}
+                      className="mx-auto h-auto"
+                      style={{
+                        display: "block",
+                        maxWidth: "100%",
+                        width: "600px",
+                      }}
+                    />
+                  ),
+
+                  p: ({
+                    node,
+                    children,
+                    ...props
+                  }: ComponentPropsWithoutRef<"p"> & { node?: any }) => {
+                    if (
+                      node &&
+                      "children" in node &&
+                      Array.isArray(node.children) &&
+                      node.children.length === 1
+                    ) {
+                      const firstChild = node.children[0];
+                  
+                      if (
+                        typeof firstChild === "object" &&
+                        "tagName" in firstChild &&
+                        firstChild.tagName === "img" &&
+                        "properties" in firstChild
+                      ) {
+                        const { src, alt, title } = firstChild.properties as {
+                          src?: string;
+                          alt?: string;
+                          title?: string;
+                        };
+                  
+                        return (
+                          <figure className="my-8 flex flex-col items-center">
+                            <img
+                              src={src}
+                              alt={alt}
+                              className="mx-auto max-w-full h-auto"
+                              style={{ display: "block" }}
+                            />
+                            {title && (
+                              <figcaption className="mt-2 text-sm italic text-base-500 text-center">
+                                {title}
+                              </figcaption>
+                            )}
+                          </figure>
+                        );
+                      }
+                    }
+                  
+                    // fallback normal paragraph
+                    return <p {...props}>{children}</p>;
+                  },
+                }}
+              >
+                {post.content}
+              </ReactMarkdown>
         </article>
       )}
 

@@ -17,6 +17,11 @@ export const AUTHORS: Record<
     name_ko: "폴 쿠퍼",
     image: "/authors/paul.png",
   },
+  "hwkim@rebellions.ai": {
+    name_en: "Kim Hyun-woo",
+    name_ko: "김현우",
+    image: "/authors/hyunwoo.png",
+  },
   "jiwon@rebellions.ai": {
     name_en: "Hwang Jiwon",
     name_ko: "황지원",
