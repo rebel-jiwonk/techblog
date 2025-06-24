@@ -17,7 +17,6 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         <span className="bg-white p-1 rounded">
           <img src="/linkedin.svg" alt="LinkedIn" className="w-4 h-4" />
         </span>
-        LinkedIn
       </a>
 
       <a
@@ -29,7 +28,6 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         <span className="bg-white p-1 rounded">
           <img src="/X.svg" alt="X" className="w-4 h-4" />
         </span>
-        X
       </a>
 
       <button
@@ -42,7 +40,7 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         <span className="bg-white p-1 rounded">
           <img src="/create-link.svg" alt="Copy link" className="w-4 h-4" />
         </span>
-        Link
+
       </button>
     </div>
   );

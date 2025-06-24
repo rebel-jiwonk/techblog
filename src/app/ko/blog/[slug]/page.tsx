@@ -7,6 +7,10 @@ import rehypeRaw from "rehype-raw";
 import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
 import SocialShare from "@/components/SocialShare";
+import TableOfContents from "@/components/TableOfContents";
+import GithubSlugger from "github-slugger";
+const slugger = new GithubSlugger();
+slugger.reset();
 
 type PageProps = {
   params: Promise<{ slug: string }>
@@ -65,8 +69,15 @@ export default async function BlogPostPage({ params }: PageProps) {
   const postUrl = `${baseUrl}/blog/${post.slug}`;
 
   return (
-      <article className="prose prose-lg max-w-3xl mx-auto text-base-800 dark:text-base-50 text-center">
-        <h1 className="text-5xl font-extrabold mt-8 mb-4">{post.title}</h1>
+    <div className="flex gap-12 px-6">
+      {/* Sidebar ToC - only show on lg screens */}
+      <aside className="w-64 hidden lg:block">
+        <TableOfContents />
+      </aside>
+  
+      {/* Main content */}
+      <article className="prose prose-lg flex-1 text-base-800 dark:text-base-50">
+      <h1 className="text-3xl font-extrabold leading snug mt-8 mb-6 text-center">{post.title}</h1>
       
         <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
           {AUTHORS[post.author_email]?.image && (
@@ -109,10 +120,36 @@ export default async function BlogPostPage({ params }: PageProps) {
             remarkPlugins={[remarkBreaks]}
             rehypePlugins={[rehypeRaw]}
             components={{
+              h2: ({ children }) => {
+                const text = String(children);
+                const id = slugger.slug(text);
+                return <h2 id={id} className="text-2xl font-bold mt-8 mb-4">{children}</h2>;
+              },
+              h3: ({ children }) => {
+                const text = String(children);
+                const id = slugger.slug(text);
+                return <h3 id={id} className="text-xl font-semibold mt-6 mb-3">{children}</h3>;
+              },
+              // h4: ({ node, children }) => {
+              //   const text = String(children).replace(/\s+/g, "-").toLowerCase();
+              //   return (
+              //     <h4 id={text} className="mt-5 mb-2 text-lg font-semibold ml-4">
+              //       {children}
+              //     </h4>
+              //   );
+              // },
+              // h5: ({ node, children }) => {
+              //   const text = String(children).replace(/\s+/g, "-").toLowerCase();
+              //   return (
+              //     <h5 id={text} className="text-base font-medium mt-4 mb-2">
+              //       {children}
+              //     </h5>
+              //   );
+              // },
               img: ({ ...props }) => (
                 <img
                   {...props}
-                  className="rounded-md my-4 w-full max-w-full object-contain"
+                  className="rounded-md my-4 w-[600px] max-w-full mx-auto h-auto object-contain"
                   alt={props.alt || ""}
                 />
               ),
@@ -122,5 +159,5 @@ export default async function BlogPostPage({ params }: PageProps) {
           </ReactMarkdown>
         </div>
       </article>
-        );
-      }
+      </div>
+  )}

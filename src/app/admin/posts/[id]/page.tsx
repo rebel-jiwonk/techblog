@@ -8,6 +8,10 @@ import ReactMarkdown from 'react-markdown'
 import remarkBreaks from 'remark-breaks'
 import rehypeRaw from 'rehype-raw'
 import { ComponentPropsWithoutRef } from "react";
+import TableOfContents from "@/components/TableOfContents";
+import GithubSlugger from "github-slugger";
+const slugger = new GithubSlugger();
+slugger.reset();
 
 interface Post {
   id: string
@@ -274,8 +278,15 @@ export default function Page() {
           </div>
         </div>
       ) : (
-        <article className="prose prose-lg dark:prose-invert max-w-none prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
-                    <h1 className="text-4xl font-bold mb-7 text-center leading-tight">
+        <div className="flex gap-12">
+  {/* TOC Sidebar */}
+            <aside className="w-64 hidden lg:block">
+              <TableOfContents />
+            </aside>
+
+            {/* Markdown content */}
+            <article className="prose prose-lg flex-1 dark:prose-invert max-w-none prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
+              <h1 className="text-4xl font-bold mb-7 text-center leading-tight">
                 {post.title.split("\n").map((line, i) => (
                   <span key={i} className="block mb-2">
                     {line}
@@ -350,6 +361,7 @@ export default function Page() {
                 {post.content}
               </ReactMarkdown>
         </article>
+        </div>
       )}
 
       <input ref={inputRef} type="file" accept="image/*" className="hidden" />

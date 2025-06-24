@@ -7,15 +7,14 @@ import rehypeRaw from "rehype-raw";
 import type { Metadata } from "next";
 import { AUTHORS } from "@/lib/authors";
 import SocialShare from "@/components/SocialShare";
-
-// type PageProps = {
-//   params: { slug: string };
-// };
+import TableOfContents from "@/components/TableOfContents";
+import GithubSlugger from "github-slugger";
+const slugger = new GithubSlugger();
+slugger.reset();
 
 type PageProps = {
   params: Promise<{ slug: string }>
 }
-
 
 const tagColors: Record<string, string> = {
   Performance: "bg-[#FFF9E3]",
@@ -70,62 +69,95 @@ export default async function BlogPostPage({ params }: PageProps) {
   const postUrl = `${baseUrl}/blog/${post.slug}`;
 
   return (
-    <article className="prose prose-lg max-w-3xl mx-auto text-base-800 dark:text-base-50 text-center">
-  <h1 className="text-5xl font-extrabold mt-8 mb-4">{post.title}</h1>
-
-  <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
-    {AUTHORS[post.author_email]?.image && (
-      <img
-        src={AUTHORS[post.author_email].image}
-        alt={post.author_email}
-        className="w-8 h-8 object-cover rounded-full"
-      />
-    )}
-    <span>{AUTHORS[post.author_email]?.name_en || post.author_email}</span>
-    <span>•</span>
-    <span>
-      {new Date(post.published_at).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      })}
-    </span>
-  </div>
-
-  <div className="flex justify-center flex-wrap gap-2 mb-4">
-    {post.tags?.map((tag: string, i: number) => (
-      <span
-        key={i}
-        className={`text-xs font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
-        style={{ borderRadius: "0px" }}
-      >
-        #{tag}
-      </span>
-    ))}
-  </div>
-
-  {/* Social share links */}
-  <SocialShare postUrl={postUrl} postTitle={post.title} />
-
-  <div className="prose prose-lg dark:prose-invert max-w-none mx-auto text-left
-              prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
-              prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
-    <ReactMarkdown
-      remarkPlugins={[remarkBreaks]}
-      rehypePlugins={[rehypeRaw]}
-      components={{
-        img: ({ ...props }) => (
-          <img
-            {...props}
-            className="rounded-md my-4 w-full max-w-full object-contain"
-            alt={props.alt || ""}
-          />
-        ),
-      }}
-    >
-      {post.content}
-    </ReactMarkdown>
-  </div>
-</article>
-  );
-}
+    <div className="flex gap-12 px-6">
+      {/* Sidebar ToC - only show on lg screens */}
+      <aside className="w-64 hidden lg:block">
+        <TableOfContents />
+      </aside>
+  
+      {/* Main content */}
+      <article className="prose prose-lg flex-1 text-base-800 dark:text-base-50">
+        <h1 className="text-3xl font-extrabold leading snug mt-8 mb-6 text-center">{post.title}</h1>
+      
+        <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
+          {AUTHORS[post.author_email]?.image && (
+            <img
+              src={AUTHORS[post.author_email].image}
+              alt={post.author_email}
+              className="w-8 h-8 object-cover rounded-full"
+            />
+          )}
+          <span>{AUTHORS[post.author_email]?.name_ko || post.author_email}</span>
+          <span>•</span>
+          <span>
+            {new Date(post.published_at).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
+        </div>
+      
+        <div className="flex justify-center flex-wrap gap-2 mb-4">
+          {post.tags?.map((tag: string, i: number) => (
+            <span
+              key={i}
+              className={`text-xs font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
+              style={{ borderRadius: "0px" }}
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+      
+        {/* Social share links */}
+        <SocialShare postUrl={postUrl} postTitle={post.title} />
+      
+        <div className="prose prose-lg dark:prose-invert max-w-none mx-auto text-left
+                    prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
+                    prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
+          <ReactMarkdown
+            remarkPlugins={[remarkBreaks]}
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              h2: ({ children }) => {
+                const text = String(children);
+                const id = slugger.slug(text);
+                return <h2 id={id} className="text-2xl font-bold mt-8 mb-4">{children}</h2>;
+              },
+              h3: ({ children }) => {
+                const text = String(children);
+                const id = slugger.slug(text);
+                return <h3 id={id} className="text-xl font-semibold mt-6 mb-3">{children}</h3>;
+              },
+              // h4: ({ node, children }) => {
+              //   const text = String(children).replace(/\s+/g, "-").toLowerCase();
+              //   return (
+              //     <h4 id={text} className="text-lg font-semibold mt-5 mb-2">
+              //       {children}
+              //     </h4>
+              //   );
+              // },
+              // h5: ({ node, children }) => {
+              //   const text = String(children).replace(/\s+/g, "-").toLowerCase();
+              //   return (
+              //     <h5 id={text} className="text-base font-medium mt-4 mb-2">
+              //       {children}
+              //     </h5>
+              //   );
+              // },
+              img: ({ ...props }) => (
+                <img
+                  {...props}
+                  className="rounded-md my-4 w-[600px] max-w-full mx-auto h-auto object-contain"
+                  alt={props.alt || ""}
+                />
+              ),
+            }}
+          >
+            {post.content}
+          </ReactMarkdown>
+        </div>
+      </article>
+      </div>
+  )}
