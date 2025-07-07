@@ -23,12 +23,14 @@ const tagColors: Record<string, string> = {
   Hardware: "bg-[#E9EEFD]",
   Tools: "bg-[#E9EEFD]",
   Quantization: "bg-[#ECFAED]",
+  Tutorials: "bg-[#FF9E9B]",
   퍼포먼스: "bg-[#FFF9E3]",
   최적화: "bg-[#FFECEC]",
   하드웨어: "bg-[#FFECF4]",
   솔루션: "bg-[#E9EEFD]",
   양자화: "bg-[#ECFAED]",
   툴: "bg-[#E9EEFD]",
+  튜토리얼: "bg-[#FF9E9B]",
 };
 
 export async function generateStaticParams() {
@@ -149,7 +151,8 @@ export default async function BlogPostPage({ params }: PageProps) {
               img: ({ ...props }) => (
                 <img
                   {...props}
-                  className="rounded-md my-4 w-[600px] max-w-full mx-auto h-auto object-contain"
+                  className="rounded-md my-4 mx-auto max-w-full h-auto object-contain"
+                  style={{ maxHeight: '500px' }}
                   alt={props.alt || ""}
                 />
               ),

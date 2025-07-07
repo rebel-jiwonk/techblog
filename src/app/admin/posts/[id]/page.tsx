@@ -229,8 +229,8 @@ export default function Page() {
           <label className="block text-sm font-bold mb-1">TAGS</label>
           <div className="flex flex-wrap gap-2">
             {(post.lang === "ko"
-              ? ["퍼포먼스", "솔루션", "최적화", "하드웨어", "툴", "양자화"]
-              : ["Performance", "Solution", "Optimization", "Hardware", "Tools", "Quantization"]
+              ? ["퍼포먼스", "솔루션", "최적화", "하드웨어", "툴", "양자화", "튜토리얼"]
+              : ["Performance", "Solution", "Optimization", "Hardware", "Tools", "Quantization", "Tutorials"]
             ).map((tag) => (
               <button
                 type="button"
