@@ -122,6 +122,11 @@ export default async function BlogPostPage({ params }: PageProps) {
             remarkPlugins={[remarkBreaks]}
             rehypePlugins={[rehypeRaw]}
             components={{
+              blockquote: ({ children, ...props }) => (
+                <blockquote className="border-l-4 border-[#D9E4ED] bg-[#F8F8FA] p-4 my-6 rounded text-[#3B434B] dark:border-[#3B434B] dark:bg-[#1B1F23] dark:text-[#EAECEF]">
+                      {children}
+                    </blockquote>
+              ),
               h2: ({ children }) => {
                 const text = String(children);
                 const id = slugger.slug(text);

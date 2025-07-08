@@ -10,6 +10,8 @@ import rehypeRaw from 'rehype-raw'
 import { ComponentPropsWithoutRef } from "react";
 import TableOfContents from "@/components/TableOfContents";
 import GithubSlugger from "github-slugger";
+import remarkGfm from 'remark-gfm';
+
 const slugger = new GithubSlugger();
 slugger.reset();
 
@@ -160,7 +162,7 @@ export default function Page() {
           </button>
         </div>
         <h1 className="text-2xl font-bold">Edit Post</h1>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mb-10">
           <button
             onClick={() => setIsPreview(!isPreview)}
             className="px-2 py-2 border text-xs border-gray-300 hover:bg-gray-50"
@@ -279,37 +281,43 @@ export default function Page() {
         </div>
       ) : (
         <div className="flex gap-12">
-  {/* TOC Sidebar */}
-            <aside className="w-64 hidden lg:block">
-              <TableOfContents />
-            </aside>
+          {/* TOC Sidebar */}
+          <aside className="w-64 hidden lg:block">
+            <TableOfContents />
+          </aside>
 
-            {/* Markdown content */}
-            <article className="prose prose-lg flex-1 dark:prose-invert max-w-none prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
-              <h1 className="text-4xl font-bold mb-7 text-center leading-tight">
-                {post.title.split("\n").map((line, i) => (
-                  <span key={i} className="block mb-2">
-                    {line}
-                  </span>
-                ))}
-              </h1>
+          {/* Content */}
+          <div className="flex-1">
+            <h1 className="text-4xl font-bold mb-7 text-center leading-tight">
+              {post.title.split("\n").map((line, i) => (
+                <span key={i} className="block mb-2">{line}</span>
+              ))}
+            </h1>
+
+            <article
+              className="prose prose-lg dark:prose-invert max-w-none 
+                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded 
+                prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4 
+                prose-table:table-auto prose-th:border prose-td:border 
+                prose-th:border-gray-300 prose-td:border-gray-200 
+                prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2"
+            >
               <ReactMarkdown
-                remarkPlugins={[remarkBreaks]}
+                remarkPlugins={[remarkBreaks, remarkGfm]}
                 rehypePlugins={[rehypeRaw]}
                 components={{
                   img: ({ alt, src }) => (
                     <img
                       src={src ?? ""}
                       alt={alt ?? ""}
-                      className="mx-auto h-auto"
-                      style={{
-                        display: "block",
-                        maxWidth: "100%",
-                        width: "600px",
-                      }}
+                      className="mx-auto h-auto max-w-full w-[600px]"
                     />
                   ),
-
+                  blockquote: ({ children }) => (
+                    <blockquote className="border-l-4 border-[#D9E4ED] bg-[#F8F8FA] pl-4 pt-1 pb-0.5 my-6 rounded text-[#3B434B] dark:border-[#3B434B] dark:bg-[#1B1F23] dark:text-[#EAECEF] font-english italic tracking-wide">
+                    {children}
+                  </blockquote>
+                  ),
                   p: ({
                     node,
                     children,
@@ -317,15 +325,12 @@ export default function Page() {
                   }: ComponentPropsWithoutRef<"p"> & { node?: any }) => {
                     if (
                       node &&
-                      "children" in node &&
                       Array.isArray(node.children) &&
                       node.children.length === 1
                     ) {
                       const firstChild = node.children[0];
-                  
                       if (
                         typeof firstChild === "object" &&
-                        "tagName" in firstChild &&
                         firstChild.tagName === "img" &&
                         "properties" in firstChild
                       ) {
@@ -334,7 +339,6 @@ export default function Page() {
                           alt?: string;
                           title?: string;
                         };
-                  
                         return (
                           <figure className="my-8 flex flex-col items-center">
                             <img
@@ -352,17 +356,17 @@ export default function Page() {
                         );
                       }
                     }
-                  
-                    // fallback normal paragraph
+
                     return <p {...props}>{children}</p>;
                   },
                 }}
               >
                 {post.content}
               </ReactMarkdown>
-        </article>
-        </div>
-      )}
+            </article>
+            </div>
+                    </div>
+                  )}
 
       <input ref={inputRef} type="file" accept="image/*" className="hidden" />
     </div>
