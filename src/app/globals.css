@@ -44,12 +44,19 @@ button, .button-text {
 }
 
 .prose blockquote {
+  line-height: 1.7;
   background-color: #F0F9FF;
   border-left: 4px solid #60A5FA;
   padding-top: 0.5rem;
   font-style: italic;
   font-family: "Soehne", sans-serif;
   color: #1B1F23;
+}
+
+.prose blockquote p {
+  font-size: 0.8rem !important;
+  font-style: normal !important;
+  line-height: 1.6;
 }
 
 .dark .prose blockquote {
@@ -70,10 +77,11 @@ button, .button-text {
 
 /* inline code 스타일 */
 .prose code {
+
   background-color: #F2F4F6 !important;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
 }
 
 /* pre 내부의 code는 배경 제거 (이중 배경 방지) */
