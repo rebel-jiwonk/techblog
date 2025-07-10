@@ -27,7 +27,7 @@ export default async function EnglishHome() {
   <div className="relative z-10 text-white p-12">
     <h1 className="text-5xl font-bold tracking-tight">Drive AI Innovation. Simple. Fast. At Scale.</h1>
     <p className="text-lg mt-4 max-w-xl">
-      Rebellions' insights on AI chips, optimization, and deep tech stories from the frontlines.
+      Rebellions&apos insights on AI chips, optimization, and deep tech stories from the frontlines.
     </p>
   </div>
 </section>

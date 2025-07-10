@@ -11,6 +11,8 @@ import { ComponentPropsWithoutRef } from "react";
 import TableOfContents from "@/components/TableOfContents";
 import GithubSlugger from "github-slugger";
 import remarkGfm from 'remark-gfm';
+import type { Element as HastElement } from 'hast';
+import { isElement } from 'hast-util-is-element';
 
 const slugger = new GithubSlugger();
 slugger.reset();
@@ -348,7 +350,7 @@ export default function Page() {
                     node,
                     children,
                     ...props
-                  }: ComponentPropsWithoutRef<"p"> & { node?: any }) => {
+                  }: ComponentPropsWithoutRef<"p"> & { node?: HastElement }) => {
                     if (
                       node &&
                       Array.isArray(node.children) &&
@@ -357,7 +359,7 @@ export default function Page() {
                       const firstChild = node.children[0];
                       if (
                         typeof firstChild === "object" &&
-                        firstChild.tagName === "img" &&
+                        isElement(firstChild, "img") &&
                         "properties" in firstChild
                       ) {
                         const { src, alt, title } = firstChild.properties as {
