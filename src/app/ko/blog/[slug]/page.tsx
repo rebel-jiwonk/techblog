@@ -21,16 +21,20 @@ const tagColors: Record<string, string> = {
   Solution: "bg-[#FFECEC]",
   Optimization: "bg-[#FFECF4]",
   Hardware: "bg-[#E9EEFD]",
-  Tools: "bg-[#E9EEFD]",
+  Tools: "bg-[#BBC9FA]",
   Quantization: "bg-[#ECFAED]",
   Tutorials: "bg-[#FF9E9B]",
+  Demos: "bg-[#C5EDC5]",
+  Industry: "bg-[#FFF3C6]",
   퍼포먼스: "bg-[#FFF9E3]",
-  최적화: "bg-[#FFECEC]",
-  하드웨어: "bg-[#FFECF4]",
-  솔루션: "bg-[#E9EEFD]",
+  최적화: "bg-[#FFECF4]",
+  하드웨어: "bg-[#E9EEFD]",
+  솔루션: "bg-[#FFECEC]",
   양자화: "bg-[#ECFAED]",
-  툴: "bg-[#E9EEFD]",
+  툴: "bg-[#BBC9FA]",
   튜토리얼: "bg-[#FF9E9B]",
+  데모: "bg-[#C5EDC5]",
+  산업: "bg-[#FFF3C6]",
 };
 
 export async function generateStaticParams() {
@@ -59,7 +63,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
   const { data: post, error } = await supabase
     .from("posts")
-    .select("title, slug, published_at, author_email, author_image, description, tags, content")
+    .select("title, slug, created_at, author_email, author_image, description, tags, content")
     .eq("slug", slug)
     .eq("lang", "ko")
     .eq("published", true)
@@ -92,7 +96,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <span>{AUTHORS[post.author_email]?.name_ko || post.author_email}</span>
           <span>•</span>
           <span>
-            {new Date(post.published_at).toLocaleDateString("en-US", {
+            {new Date(post.created_at).toLocaleDateString("en-US", {
               year: "numeric",
               month: "short",
               day: "numeric",

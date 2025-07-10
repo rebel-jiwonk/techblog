@@ -173,3 +173,37 @@ button, .button-text {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 } */
+
+
+ul, ol {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #1B1F23;
+}
+
+.prose a {
+  color: #52F756;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: #3EDC41;
+}
+
+.dark .prose a {
+  color: #52F756;
+}
+
+.dark .prose a:hover {
+  color: #6DFF6C;
+}

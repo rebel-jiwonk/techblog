@@ -4,7 +4,7 @@ interface SupabasePost {
   id: string;
   title: string;
   slug: string;
-  published_at: string;
+  created_at: string;
   author_email?: string;
   author_image?: string;
   description?: string;
@@ -17,11 +17,11 @@ export async function getAllSupabasePosts(lang: string = "en") {
   const { data, error } = await supabase
     .from("posts")
     .select(
-      "id, title, slug, published_at, author_email, author_image, description, tags, cover_image, content"
+      "id, title, slug, created_at, author_email, author_image, description, tags, cover_image, content"
     )
     .eq("lang", lang)
     .eq("published", true)
-    .order("published_at", { ascending: false });
+    .order("created_at", { ascending: false });
 
   if (error) {
     console.error("❌ Failed to fetch posts:", error.message);
@@ -32,7 +32,7 @@ export async function getAllSupabasePosts(lang: string = "en") {
     id: post.id,
     title: post.title,
     slug: post.slug,
-    date: post.published_at,
+    date: post.created_at,
     description: post.description || "No description provided.",
     tags: Array.isArray(post.tags) ? post.tags : [],
     authors: [
