@@ -150,6 +150,21 @@ export default function Page() {
     alert('Post saved successfully!')
   }
 
+  const handlePublish = async () => {
+  const { error } = await supabase
+    .from('posts')
+    .update({ published: true })
+    .eq('id', post?.id);
+
+  if (error) {
+    alert('Error publishing post: ' + error.message);
+    return;
+  }
+
+  alert('Post published successfully!');
+  setPost((prev) => prev && { ...prev, published: true });
+};
+
   return (
     <div className="max-w-screen-xl w-full mx-auto px-8 py-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -174,6 +189,17 @@ export default function Page() {
             className="px-2 py-2 bg-black text-xs text-white hover:bg-opacity-80"
           >
             Save Changes
+          </button>
+          <button
+            onClick={handlePublish}
+            className={`px-2 py-2 text-xs border ${
+              post?.published
+                ? 'bg-green-600 text-white cursor-default'
+                : 'bg-white text-green-600 hover:bg-green-50'
+            }`}
+            disabled={post?.published}
+          >
+            {post?.published ? 'Published' : 'Publish'}
           </button>
         </div>
       </div>

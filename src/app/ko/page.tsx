@@ -25,9 +25,9 @@ export default async function KoreanHome() {
 
         {/* Content */}
         <div className="relative z-10 text-white p-12">
-          <h1 className="text-5xl font-bold tracking-tight leading-tight">환영합니다</h1>
+          <h1 className="text-5xl font-bold tracking-tight leading-tight">Drive AI Innovation. Simple. Fast. At Scale.</h1>
           <p className="text-xl mt-4 max-w-xl">
-            이 블로그는 리벨리온의 AI 칩 및 시스템 관련 기술 인사이트를 공유합니다.
+            리벨리온의 테크 블로그에서 AI 최적화 솔루션에 대한 기술 인사이트를 알아보세요.
           </p>
         </div>
       </section>

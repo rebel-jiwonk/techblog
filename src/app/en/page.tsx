@@ -25,9 +25,9 @@ export default async function EnglishHome() {
 
   {/* Content */}
   <div className="relative z-10 text-white p-12">
-    <h1 className="text-5xl font-bold tracking-tight">Rebellions Tech Blog</h1>
+    <h1 className="text-5xl font-bold tracking-tight">Drive AI Innovation. Simple. Fast. At Scale.</h1>
     <p className="text-lg mt-4 max-w-xl">
-      Insights on AI chips, optimization, and deep tech stories from the frontlines.
+      Rebellions' insights on AI chips, optimization, and deep tech stories from the frontlines.
     </p>
   </div>
 </section>
