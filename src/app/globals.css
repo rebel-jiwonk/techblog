@@ -188,6 +188,20 @@ li {
   color: #1B1F23;
 }
 
+.dark ul,
+.dark ol {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.dark li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #F5F5F5;
+}
+
 .prose a {
   color: #52F756;
   text-decoration: underline;
