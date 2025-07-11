@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 type Props = {
   postUrl: string;
   postTitle: string;
@@ -15,7 +17,13 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         className="flex items-center gap-2 hover:underline"
       >
         <span className="bg-white p-1 rounded">
-          <img src="/linkedin.svg" alt="LinkedIn" className="w-4 h-4" />
+          <Image
+            src="/linkedin.svg"
+            alt="LinkedIn"
+            className="w-4 h-4"
+            width={16}
+            height={16}
+          />
         </span>
       </a>
 
@@ -26,7 +34,7 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         className="flex items-center gap-2 hover:underline"
       >
         <span className="bg-white p-1 rounded">
-          <img src="/X.svg" alt="X" className="w-4 h-4" />
+          <Image src="/X.svg" alt="X" className="w-4 h-4" width={16} height={16} />
         </span>
       </a>
 
@@ -38,9 +46,14 @@ export default function SocialShare({ postUrl, postTitle }: Props) {
         className="flex items-center gap-2 hover:underline"
       >
         <span className="bg-white p-1 rounded">
-          <img src="/create-link.svg" alt="Copy link" className="w-4 h-4" />
+          <Image
+            src="/create-link.svg"
+            alt="Copy link"
+            className="w-4 h-4"
+            width={16}
+            height={16}
+          />
         </span>
-
       </button>
     </div>
   );

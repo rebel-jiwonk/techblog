@@ -9,6 +9,8 @@ import { AUTHORS } from "@/lib/authors";
 import SocialShare from "@/components/SocialShare";
 import TableOfContents from "@/components/TableOfContents";
 import GithubSlugger from "github-slugger";
+import Image from "next/image";
+
 const slugger = new GithubSlugger();
 slugger.reset();
 
@@ -87,10 +89,12 @@ export default async function BlogPostPage({ params }: PageProps) {
       
         <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
           {AUTHORS[post.author_email]?.image && (
-            <img
-              src={AUTHORS[post.author_email].image}
+            <Image
+              src={AUTHORS[post.author_email]?.image || "/authors/default.png"}
               alt={post.author_email}
               className="w-8 h-8 object-cover rounded-full"
+              width={32}
+              height={32}
             />
           )}
           <span>{AUTHORS[post.author_email]?.name_ko || post.author_email}</span>
@@ -126,10 +130,10 @@ export default async function BlogPostPage({ params }: PageProps) {
             remarkPlugins={[remarkBreaks]}
             rehypePlugins={[rehypeRaw]}
             components={{
-              blockquote: ({ children, ...props }) => (
+              blockquote: ({ children }) => (
                 <blockquote className="border-l-4 border-[#D9E4ED] bg-[#F8F8FA] p-4 my-6 rounded text-[#3B434B] dark:border-[#3B434B] dark:bg-[#1B1F23] dark:text-[#EAECEF]">
-                      {children}
-                    </blockquote>
+                  {children}
+                </blockquote>
               ),
               h2: ({ children }) => {
                 const text = String(children);
@@ -157,14 +161,21 @@ export default async function BlogPostPage({ params }: PageProps) {
               //     </h5>
               //   );
               // },
-              img: ({ ...props }) => (
-                <img
-                  {...props}
-                  className="rounded-md my-4 mx-auto max-w-full h-auto object-contain"
-                  style={{ maxHeight: '500px' }}
-                  alt={props.alt || ""}
-                />
-              ),
+              img: ({ ...props }) => {
+                if (typeof props.src === "string") {
+                  return (
+                    <Image
+                      src={props.src}
+                      alt={props.alt || ""}
+                      className="rounded-md my-4 mx-auto max-w-full h-auto object-contain"
+                      style={{ maxHeight: '500px' }}
+                      width={600}
+                      height={400}
+                    />
+                  );
+                }
+                return null;
+              },
             }}
           >
             {post.content}
