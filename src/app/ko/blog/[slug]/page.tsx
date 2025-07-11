@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import rehypeRaw from "rehype-raw";
 import type { Metadata } from "next";
+import remarkGfm from 'remark-gfm';
 import { AUTHORS } from "@/lib/authors";
 import SocialShare from "@/components/SocialShare";
 import TableOfContents from "@/components/TableOfContents";
@@ -119,14 +120,17 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Social share links */}
         <SocialShare postUrl={postUrl} postTitle={post.title} />
       
-        <div className="prose prose-lg dark:prose-invert max-w-none mx-auto text-left
-                    prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
-                    prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4">
+        <div className="prose prose-lg dark:prose-invert max-w-none 
+                prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded 
+                prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4 
+                prose-table:table-auto prose-th:border prose-td:border 
+                prose-th:border-gray-300 prose-td:border-gray-200 
+                prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2">
           <ReactMarkdown
-            remarkPlugins={[remarkBreaks]}
+            remarkPlugins={[remarkBreaks, remarkGfm]}
             rehypePlugins={[rehypeRaw]}
             components={{
-              blockquote: ({ children, ...props }) => (
+              blockquote: ({ children }) => (
                 <blockquote className="border-l-4 border-[#D9E4ED] bg-[#F8F8FA] p-4 my-6 rounded text-[#3B434B] dark:border-[#3B434B] dark:bg-[#1B1F23] dark:text-[#EAECEF]">
                       {children}
                     </blockquote>

@@ -207,3 +207,23 @@ li {
 .dark .prose a:hover {
   color: #6DFF6C;
 }
+
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid #e2ebf2;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+.dark .prose th,
+.dark .prose td {
+  border-color: #3B434B;
+}
