@@ -13,6 +13,7 @@ import GithubSlugger from "github-slugger";
 import remarkGfm from 'remark-gfm';
 import type { Element as HastElement } from 'hast';
 import { isElement } from 'hast-util-is-element';
+import Image from "next/image";
 
 const slugger = new GithubSlugger();
 slugger.reset();
@@ -335,11 +336,16 @@ export default function Page() {
                 rehypePlugins={[rehypeRaw]}
                 components={{
                   img: ({ alt, src }) => (
-                    <img
-                      src={src ?? ""}
-                      alt={alt ?? ""}
-                      className="mx-auto h-auto max-w-full w-[600px]"
-                    />
+                    typeof src === "string" ? (
+                      <Image
+                        src={src}
+                        alt={alt ?? ""}
+                        className="mx-auto h-auto max-w-full w-[600px]"
+                        width={600}
+                        height={400}
+                        style={{ height: "auto" }}
+                      />
+                    ) : null
                   ),
                   blockquote: ({ children }) => (
                     <blockquote className="border-l-4 border-[#D9E4ED] bg-[#F8F8FA] pl-4 pt-1 pb-0.5 my-6 rounded text-[#3B434B] dark:border-[#3B434B] dark:bg-[#1B1F23] dark:text-[#EAECEF] font-english italic tracking-wide">
