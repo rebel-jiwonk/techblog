@@ -27,7 +27,7 @@ export default function TableOfContents() {
   }, []);
 
   return (
-    <nav className="sticky top-40 text-sm text-base-500">
+    <nav className="sticky top-40 text-sm text-base-500 dark:text-gray-300">
       <h2 className="text-base font-bold mb-4">On this Page</h2>
       <ul className="space-y-3">
         {headings.map((h, i) => (
