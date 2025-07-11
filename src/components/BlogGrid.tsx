@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { BlogPost } from "@/types";
 import { AUTHORS } from "@/lib/authors";
+import Image from "next/image";
 
 const tagColors: Record<string, string> = {
   Performance: "bg-[#FFF9E3]",
@@ -101,10 +102,12 @@ export default function BlogGrid({
                         className="flex items-center gap-1 hover:text-accent-green text-xs"
                       >
                         {AUTHORS[author.name]?.image && (
-                          <img
-                            src={AUTHORS[author.name].image}
+                          <Image
+                            src={AUTHORS[author.name]?.image || "/authors/default.png"}
                             alt={author.name}
                             className="w-6 h-6 object-cover rounded-full"
+                            width={24}
+                            height={24}
                           />
                         )}
                         <span>{AUTHORS[author.name]?.name_ko || author.name}</span>

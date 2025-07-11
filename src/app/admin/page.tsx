@@ -6,6 +6,7 @@ import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AUTHORS } from "@/lib/authors";
+import Image from "next/image";
 
 interface Post {
   id: string;
@@ -149,10 +150,12 @@ export default function AdminPage() {
 
                   <div className="flex items-center gap-2 mt-1">
                     {author?.image && (
-                      <img
+                      <Image
                         src={author.image}
                         alt={displayName}
                         className="w-5 h-5 rounded-full object-cover"
+                        width={20}
+                        height={20}
                       />
                     )}
                     <p className="text-sm text-gray-600">Author: {displayName}</p>
