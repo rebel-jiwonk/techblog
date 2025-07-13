@@ -16,6 +16,7 @@ const tagColors: Record<string, string> = {
   Tutorials: "bg-[#FF9E9B]",
   Demos: "bg-[#C5EDC5]",
   Industry: "bg-[#FFF3C6]",
+  Release: "bg-[#9CE19D]",
   퍼포먼스: "bg-[#FFF9E3]",
   최적화: "bg-[#FFECF4]",
   하드웨어: "bg-[#E9EEFD]",
@@ -25,6 +26,7 @@ const tagColors: Record<string, string> = {
   튜토리얼: "bg-[#FF9E9B]",
   데모: "bg-[#C5EDC5]",
   산업: "bg-[#FFF3C6]",
+  릴리즈: "bg-[#9CE19D]",
 };
 
 export default function BlogGrid({

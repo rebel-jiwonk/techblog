@@ -1,4 +1,5 @@
 export type BlogPost = {
+  id?: string; // optional if not always present
   title: string;
   slug: string;
   description: string;

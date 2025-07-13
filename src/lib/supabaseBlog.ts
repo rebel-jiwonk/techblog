@@ -11,13 +11,28 @@ interface SupabasePost {
   tags?: string[];
   cover_image?: string;
   content?: string;
+  lang: "en" | "ko"; // ✅ Add this line
+}
+
+export async function getFeaturedPosts(lang = "en") {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("id, title, slug, created_at, tags, cover_image, content, lang, author_email, author_image")
+    .eq("featured", true)
+    .eq("lang", lang)
+    .eq("published", true)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return data; // ✅ return as-is; let FeaturedCarousel handle it
 }
 
 export async function getAllSupabasePosts(lang: string = "en") {
   const { data, error } = await supabase
     .from("posts")
     .select(
-      "id, title, slug, created_at, author_email, author_image, description, tags, cover_image, content"
+      "id, title, slug, created_at, author_email, author_image, description, tags, cover_image, content, lang"
     )
     .eq("lang", lang)
     .eq("published", true)
@@ -42,7 +57,7 @@ export async function getAllSupabasePosts(lang: string = "en") {
       },
     ],
     coverImage: post.cover_image || null,
-    lang,
+    lang: post.lang,
     content: post.content || "",
   }));
 }

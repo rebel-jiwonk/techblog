@@ -17,6 +17,7 @@ interface Post {
   author_email: string;
   tags: string[];
   lang: "en" | "ko";
+  featured: boolean;
 }
 
 export default function AdminPage() {
@@ -41,7 +42,7 @@ export default function AdminPage() {
 
       const { data, error: postsError } = await supabase
         .from("posts")
-        .select("id, title, slug, published, created_at, author_email, tags, lang, description")
+        .select("id, title, slug, published, created_at, author_email, tags, lang, description, featured")
         .order("created_at", { ascending: false });
 
       if (!postsError) setPosts(data || []);
@@ -70,6 +71,21 @@ export default function AdminPage() {
       alert("Failed to update publish status: " + error.message);
     }
   };
+
+  const toggleFeatured = async (post: Post) => {
+  const { error } = await supabase
+    .from("posts")
+    .update({ featured: !post.featured })
+    .eq("id", post.id);
+
+  if (!error) {
+    setPosts((prev) =>
+      prev.map((p) => (p.id === post.id ? { ...p, featured: !p.featured } : p))
+    );
+  } else {
+    alert("Failed to update featured status: " + error.message);
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -184,6 +200,17 @@ export default function AdminPage() {
                   >
                     {post.published ? "Published" : "Draft"}
                   </span>
+
+                  <button
+                    onClick={() => toggleFeatured(post)}
+                    className={`text-xs px-2 py-1 border ${
+                      post.featured
+                        ? "border-purple-300 text-purple-600 hover:bg-purple-100"
+                        : "border-gray-300 text-gray-600 hover:bg-gray-100"
+                    }`}
+                  >
+                    {post.featured ? "Unfeature" : "Feature"}
+                  </button>
 
                   <button
                     onClick={() => togglePublish(post)}
