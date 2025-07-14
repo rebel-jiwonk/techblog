@@ -66,5 +66,5 @@ export default async function KoreanHome() {
         </p>
       </section>
     </div>
-  );
+  ); 
 }
