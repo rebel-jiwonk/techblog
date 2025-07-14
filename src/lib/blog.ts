@@ -38,6 +38,7 @@ export async function getAllPosts(lang: "ko" | "en"): Promise<BlogPost[]> {
           slug, // use filename if frontmatter has no slug
           description: data.description,
           date: data.date,
+          created_at: data.date,
           tags: data.tags,
           authors: data.authors,
           lang: lang as "en" | "ko",

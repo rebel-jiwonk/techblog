@@ -12,12 +12,13 @@ import TableOfContents from "@/components/TableOfContents";
 import GithubSlugger from "github-slugger";
 import Image from "next/image";
 
+// Define StaticParams to use Promise consistently
+type StaticParams = {
+  params: Promise<{ slug: string }>;
+};
+
 const slugger = new GithubSlugger();
 slugger.reset();
-
-type PageProps = {
-  params: { slug: string };
-};
 
 const tagColors: Record<string, string> = {
   Performance: "bg-[#FFF9E3]",
@@ -47,8 +48,9 @@ export async function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug }));
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const slug = params.slug;
+export async function generateMetadata({ params }: StaticParams): Promise<Metadata> {
+  const resolvedParams = await params;
+  const { slug } = resolvedParams as { slug: string };
   const lang = "ko";
 
   const { data, error } = await supabase
@@ -77,8 +79,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function BlogPostPage({ params }: PageProps) {
-  const { slug } = params;
+export default async function BlogPostPage({ params }: StaticParams) {
+  const resolvedParams = await params;
+  const { slug } = resolvedParams as { slug: string };
   const lang = "ko";
 
   const { data: post, error } = await supabase
@@ -96,12 +99,9 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-12 px-6">
-      {/* TOC Sidebar */}
       <aside className="hidden lg:block">
         <TableOfContents />
       </aside>
-
-      {/* Main Content */}
       <div>
         {post.cover_image && (
           <Image
@@ -112,10 +112,8 @@ export default async function BlogPostPage({ params }: PageProps) {
             className="mx-auto rounded-lg object-cover my-6 max-h-[500px] w-full"
           />
         )}
-
         <article className="prose prose-lg text-base-800 dark:text-base-50">
           <h1 className="text-3xl font-extrabold leading-snug mt-8 mb-6 text-center">{post.title}</h1>
-
           <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
             {AUTHORS[post.author_email]?.image && (
               <Image
@@ -136,20 +134,18 @@ export default async function BlogPostPage({ params }: PageProps) {
               })}
             </span>
           </div>
-
           <div className="flex justify-center flex-wrap gap-2 mb-4">
             {post.tags?.map((tag: string, i: number) => (
               <span
                 key={i}
-                className={`text-xs font-medium px-3 py-1 rounded border border-gray-300 ${tagColors[tag] || "bg-gray-100 text-black"}`}
+                className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
+                style={{ fontFamily: "'Space Mono', monospace", borderRadius: "0px" }}
               >
                 #{tag}
               </span>
             ))}
           </div>
-
           <SocialShare postUrl={postUrl} postTitle={post.title} />
-
           <div className="prose prose-lg dark:prose-invert max-w-none 
               prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded 
               prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4 

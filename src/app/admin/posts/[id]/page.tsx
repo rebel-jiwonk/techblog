@@ -3,16 +3,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabaseClient';
-import MDEditor, { commands as defaultCommands, ICommand } from '@uiw/react-md-editor';
+import MDEditor, { commands as defaultCommands } from '@uiw/react-md-editor';
 import ReactMarkdown from 'react-markdown';
 import remarkBreaks from 'remark-breaks';
 import rehypeRaw from 'rehype-raw';
-import { ComponentPropsWithoutRef } from 'react';
-import TableOfContents from '@/components/TableOfContents';
 import GithubSlugger from 'github-slugger';
 import remarkGfm from 'remark-gfm';
-import type { Element as HastElement } from 'hast';
-import { isElement } from 'hast-util-is-element';
 import Image from 'next/image';
 
 const slugger = new GithubSlugger();

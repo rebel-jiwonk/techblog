@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -36,10 +37,20 @@ type Post = {
 };
 
 export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
+
+  const [, setFilterByTag] = useState<string | null>(null);
+
   return (
-    <div className="mb-12 overflow-x-auto">
-      <div className="flex gap-6">
-        {posts.map((post, index) => (
+  <div className="mb-12 overflow-x-auto">
+    <div className="flex gap-6">
+      {posts.map((post, index) => {
+        const formattedDate = new Date(post.created_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+
+        return (
           <Link
             key={index}
             href={`/${post.lang}/blog/${post.slug}`}
@@ -52,27 +63,28 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
               height={160}
               className="rounded mb-3 object-cover"
             />
-            <div className="text-sm text-base-500 mb-2">
-              {new Date(post.created_at).toLocaleDateString()}
-            </div>
+            <span className="text-sm text-base-500 mb-2 block">
+              {formattedDate}
+            </span>
             <div className="font-semibold text-base-800 dark:text-base-50 mb-1">
               {post.title}
             </div>
-            <div className="flex flex-wrap gap-1 text-xs">
+            <div className="flex flex-wrap gap-2 mt-2 text-xs">
               {post.tags?.map((tag, i) => (
                 <span
                   key={i}
-                  className={`px-2 py-0.5 ${
-                    tagColors[tag] || "bg-gray-200 text-gray-700"
-                  }`}
+                  onClick={() => setFilterByTag(tag)}
+                  className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
+                  style={{ fontFamily: "'Space Mono', monospace", borderRadius: "0px" }}
                 >
                   #{tag}
                 </span>
               ))}
             </div>
           </Link>
-        ))}
-      </div>
+        );
+      })}
     </div>
+  </div>
   );
 }

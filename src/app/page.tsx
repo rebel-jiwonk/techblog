@@ -8,10 +8,10 @@ export default function HomeRedirect() {
 
   useEffect(() => {
     const lang = navigator.language;
-    if (lang.startsWith("en")) {
-      router.replace("/en");
-    } else {
+    if (lang.startsWith("ko")) {
       router.replace("/ko");
+    } else {
+      router.replace("/en");
     }
   }, [router]);
 

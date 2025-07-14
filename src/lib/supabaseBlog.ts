@@ -47,7 +47,7 @@ export async function getAllSupabasePosts(lang: string = "en") {
     id: post.id,
     title: post.title,
     slug: post.slug,
-    date: post.created_at,
+    created_at: post.created_at,
     description: post.description || "No description provided.",
     tags: Array.isArray(post.tags) ? post.tags : [],
     authors: [

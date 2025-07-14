@@ -77,7 +77,7 @@ export default function BlogGrid({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPosts.map((post) => {
           // const authorInfo = post.authors?.[0] ? AUTHORS[post.authors[0].name] : null;
-          const formattedDate = new Date(post.date).toLocaleDateString("en-US", {
+          const formattedDate = new Date(post.created_at).toLocaleDateString("en-US", {
             year: "numeric",
             month: "short",
             day: "numeric",

@@ -1,7 +1,6 @@
 import { getFeaturedPosts, getAllSupabasePosts } from "@/lib/supabaseBlog";
 import FeaturedCarousel from "@/components/FeaturedCarousel";
 import BlogGrid from "@/components/BlogGrid";
-import type { BlogPost } from "@/types";
 
 export default async function KoreanHome() {
   const [posts, featuredPosts] = await Promise.all([

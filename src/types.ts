@@ -3,7 +3,7 @@ export type BlogPost = {
   title: string;
   slug: string;
   description: string;
-  date: string;
+  created_at: string;
   tags: string[];
   authors: {
     name: string;
