@@ -146,10 +146,10 @@ export default function Page() {
           <button onClick={() => setIsPreview(!isPreview)} className="px-3 py-2 border text-sm border-gray-300 hover:bg-gray-50">
             {isPreview ? 'Edit' : 'Preview'}
           </button>
-          <button onClick={handleSave} className="px-3 py-2 bg-black text-white text-sm rounded hover:bg-opacity-80">
+          <button onClick={handleSave} className="px-3 py-2 bg-black text-white text-sm hover:bg-opacity-80">
             Save
           </button>
-          <button onClick={handlePublish} disabled={post.published} className={`px-3 py-2 text-sm rounded ${post.published ? 'bg-green-600 text-white' : 'bg-white border border-green-600 text-green-600 hover:bg-green-50'}`}>
+          <button onClick={handlePublish} disabled={post.published} className={`px-3 py-2 text-sm ${post.published ? 'bg-green-600 text-white' : 'bg-white border border-green-600 text-green-600 hover:bg-green-50'}`}>
             {post.published ? 'Published' : 'Publish'}
           </button>
         </div>
@@ -159,7 +159,7 @@ export default function Page() {
         <label className="block text-sm font-bold mb-1">COVER IMAGE</label>
         <div ref={dropRef} onDragOver={(e) => { e.preventDefault(); setDragging(true); }} onDragLeave={() => setDragging(false)} onDrop={handleDrop} className={`border-2 border-dashed p-6 rounded text-center ${dragging ? 'border-black bg-gray-100' : 'border-gray-300'}`}>
           {post.cover_image ? (
-            <Image src={post.cover_image} alt="Cover" width={600} height={300} className="mx-auto mb-2 rounded" />
+            <Image src={post.cover_image} alt="Cover" width={600} height={300} className="mx-auto mb-2" />
           ) : (
             <p className="text-sm text-gray-500">Drag & drop or click to upload cover image</p>
           )}
@@ -174,15 +174,15 @@ export default function Page() {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-bold mb-1">TITLE</label>
-            <textarea value={post.title} onChange={(e) => setPost({ ...post, title: e.target.value })} rows={2} className="w-full p-2 border rounded focus:ring-2 focus:ring-black" />
+            <textarea value={post.title} onChange={(e) => setPost({ ...post, title: e.target.value })} rows={2} className="w-full p-2 border focus:ring-2 focus:ring-black" />
           </div>
           <div>
             <label className="block text-sm font-bold mb-1">SLUG</label>
-            <input value={post.slug} onChange={(e) => setPost({ ...post, slug: e.target.value })} className="w-full p-2 border rounded focus:ring-2 focus:ring-black" />
+            <input value={post.slug} onChange={(e) => setPost({ ...post, slug: e.target.value })} className="w-full p-2 border focus:ring-2 focus:ring-black" />
           </div>
           <div>
             <label className="block text-sm font-bold mb-1">LANGUAGE</label>
-            <select value={post.lang} onChange={(e) => setPost({ ...post, lang: e.target.value as 'en' | 'ko' })} className="w-full p-2 border rounded focus:ring-2 focus:ring-black">
+            <select value={post.lang} onChange={(e) => setPost({ ...post, lang: e.target.value as 'en' | 'ko' })} className="w-full p-2 border focus:ring-2 focus:ring-black">
               <option value="en">English</option>
               <option value="ko">Korean</option>
             </select>
@@ -194,7 +194,7 @@ export default function Page() {
               <button
                 key={tag}
                 type="button"
-                className={`px-2 py-1 text-sm border rounded ${
+                className={`px-2 py-1 text-sm border ${
                   post.tags.includes(tag)
                     ? `${tagColors[tag]} text-black border-black`
                     : 'bg-gray-100 text-gray-600 border-gray-300'
