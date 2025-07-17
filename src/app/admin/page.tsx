@@ -94,7 +94,7 @@ export default function AdminPage() {
         {userEmail && (
           <button
             onClick={handleLogout}
-            className="text-sm border border-gray-400 px-3 py-1 rounded hover:bg-gray-100"
+            className="text-sm border border-gray-400 px-3 py-1 hover:bg-gray-100"
           >
             Logout ({userEmail})
           </button>
@@ -120,6 +120,8 @@ export default function AdminPage() {
                   slug: `new-post-${Date.now()}`,
                   content: "",
                   lang: "en",
+                  description: "",
+                  cover_image: "",
                   author_email: email,
                 },
               ])
