@@ -54,32 +54,45 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
           <Link
             key={index}
             href={`/${post.lang}/blog/${post.slug}`}
-            className="min-w-[300px] bg-base-100 dark:bg-base-700 rounded border border-base-200 dark:border-base-600 shadow-sm p-4 flex-shrink-0"
+            className="min-w-[330px] max-w-[300px] bg-base-100 dark:bg-base-700 rounded border border-base-200 dark:border-base-600 shadow-sm p-4 flex-shrink-0"
           >
             <Image
               src={post.cover_image}
               alt={post.title}
               width={300}
               height={160}
-              className="rounded mb-3 object-cover"
+              className="rounded mb-3 object-contain"
             />
-            <span className="text-sm text-base-500 mb-2 block">
-              {formattedDate}
-            </span>
-            <div className="font-semibold text-base-800 dark:text-base-50 mb-1">
-              {post.title}
-            </div>
-            <div className="flex flex-wrap gap-2 mt-2 text-xs">
-              {post.tags?.map((tag, i) => (
-                <span
-                  key={i}
-                  onClick={() => setFilterByTag(tag)}
-                  className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
-                  style={{ fontFamily: "'Space Mono', monospace", borderRadius: "0px" }}
-                >
-                  #{tag}
-                </span>
-              ))}
+            
+            {/* Fixed-width text container */}
+            <div className="flex flex-col w-[300px]">
+              <span className="text-sm text-base-500 mb-2 block">
+                {formattedDate}
+              </span>
+
+              <div
+                className="font-semibold text-base-800 dark:text-base-50 mb-1 overflow-hidden"
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {post.title}
+              </div>
+
+              <div className="flex flex-wrap gap-2 mt-2 text-xs">
+                {post.tags?.map((tag, i) => (
+                  <span
+                    key={i}
+                    onClick={() => setFilterByTag(tag)}
+                    className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
+                    style={{ fontFamily: "'Space Mono', monospace", borderRadius: "0px" }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
             </div>
           </Link>
         );

@@ -171,7 +171,7 @@ export default function Page() {
         alt="Cover"
         width={900}
         height={500}
-        className="mx-auto rounded-lg object-cover my-6 max-h-[500px] w-full"
+        className="mx-auto object-contain my-6 max-h-[500px] w-full"
       />
     )}
 

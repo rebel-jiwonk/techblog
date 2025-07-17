@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: StaticParams) {
             alt="Cover image"
             width={900}
             height={500}
-            className="mx-auto rounded-lg object-cover my-6 max-h-[500px] w-full"
+            className="mx-auto rounded-lg object-contain my-6 max-h-[500px] w-full"
           />
         )}
         <article className="prose prose-lg text-base-800 dark:text-base-50">
