@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AUTHORS } from "@/lib/authors";
 import Image from "next/image";
+import { tagColors } from "@/lib/tagColors";
 
 interface Post {
   id: string;
@@ -89,7 +90,7 @@ export default function AdminPage() {
 };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         {userEmail && (
@@ -121,6 +122,7 @@ export default function AdminPage() {
                   slug: `new-post-${Date.now()}`,
                   content: "",
                   lang: "en",
+                  category: "",
                   description: "",
                   cover_image: "",
                   author_email: email,
@@ -166,6 +168,9 @@ export default function AdminPage() {
                   >
                     <h2 className="text-xl font-semibold cursor-pointer">{post.title}</h2>
                   </Link>
+                  <span className="text-xs px-2 py-0.5 bg-black text-white font-mono uppercase">
+                    {post.category}
+                  </span>
 
                   <div className="flex items-center gap-2 mt-1">
                     {author?.image && (
@@ -185,9 +190,11 @@ export default function AdminPage() {
                       {post.tags.map((tag, i) => (
                         <span
                           key={i}
-                          className="text-xs px-2 py-0.5 bg-gray-200 text-gray-700 rounded-full"
+                          className={`text-xs px-2 py-0.5 ${
+                            tagColors[tag] || "bg-gray-200 text-gray-700"
+                          }`}
                         >
-                          {tag}
+                          #{tag}
                         </span>
                       ))}
                     </div>

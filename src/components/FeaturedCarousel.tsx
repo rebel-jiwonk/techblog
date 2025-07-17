@@ -3,29 +3,30 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { tagColors } from "@/lib/tagColors";
 
-const tagColors: Record<string, string> = {
-  Performance: "bg-[#FFF9E3]",
-  Solution: "bg-[#CDA7FF]",
-  Optimization: "bg-[#FFECF4]",
-  Hardware: "bg-[#E9EEFD]",
-  Tools: "bg-[#BBC9FA]",
-  Quantization: "bg-[#ECFAED]",
-  Tutorials: "bg-[#FF9E9B]",
-  Demos: "bg-[#C5EDC5]",
-  Industry: "bg-[#FFF3C6]",
-  Release: "bg-[#9CE19D]",
-  퍼포먼스: "bg-[#FFF9E3]",
-  최적화: "bg-[#FFECF4]",
-  하드웨어: "bg-[#E9EEFD]",
-  솔루션: "bg-[#CDA7FF]",
-  양자화: "bg-[#ECFAED]",
-  툴: "bg-[#BBC9FA]",
-  튜토리얼: "bg-[#FF9E9B]",
-  데모: "bg-[#C5EDC5]",
-  산업: "bg-[#FFF3C6]",
-  릴리즈: "bg-[#9CE19D]",
-};
+// const tagColors: Record<string, string> = {
+//   Performance: "bg-[#FFF9E3]",
+//   Solution: "bg-[#CDA7FF]",
+//   Optimization: "bg-[#FFECF4]",
+//   Hardware: "bg-[#E9EEFD]",
+//   Tools: "bg-[#BBC9FA]",
+//   Quantization: "bg-[#ECFAED]",
+//   Tutorials: "bg-[#FF9E9B]",
+//   Demos: "bg-[#C5EDC5]",
+//   Industry: "bg-[#FFF3C6]",
+//   Release: "bg-[#9CE19D]",
+//   퍼포먼스: "bg-[#FFF9E3]",
+//   최적화: "bg-[#FFECF4]",
+//   하드웨어: "bg-[#E9EEFD]",
+//   솔루션: "bg-[#CDA7FF]",
+//   양자화: "bg-[#ECFAED]",
+//   툴: "bg-[#BBC9FA]",
+//   튜토리얼: "bg-[#FF9E9B]",
+//   데모: "bg-[#C5EDC5]",
+//   산업: "bg-[#FFF3C6]",
+//   릴리즈: "bg-[#9CE19D]",
+// };
 
 type Post = {
   title: string;
@@ -86,8 +87,13 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   <span
                     key={i}
                     onClick={() => setFilterByTag(tag)}
-                    className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${tagColors[tag] || "bg-base-200"}`}
-                    style={{ fontFamily: "'Space Mono', monospace", borderRadius: "0px" }}
+                    className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${
+                      tagColors[tag] || "bg-base-200"
+                    }`}
+                    style={{
+                      fontFamily: "'Space Mono', monospace",
+                      borderRadius: "0px",
+                    }}
                   >
                     #{tag}
                   </span>
