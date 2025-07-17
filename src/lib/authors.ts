@@ -72,6 +72,11 @@ export const AUTHORS: Record<
     name_ko: "임정수",
     image: "/authors/jeongsu.png",
   },
+  "gyusung@rebellions.ai": {
+    name_en: "Jo Gyu-sung",
+    name_ko: "조규성",
+    image: "/authors/gyusung.png",
+  }
 };
     // "Paul Kuper": { image: "/authors/paul.png" },
     // "폴 쿠퍼": { image: "/authors/paul.png" },
