@@ -16,6 +16,7 @@ export async function getPost(lang: "ko" | "en", slug: string): Promise<BlogPost
   return {
     ...(data as Omit<BlogPost, "content">),
     slug,
+    cover_image: data.cover_image,
     content,
   };
 }
@@ -42,6 +43,7 @@ export async function getAllPosts(lang: "ko" | "en"): Promise<BlogPost[]> {
           tags: data.tags,
           authors: data.authors,
           lang: lang as "en" | "ko",
+          cover_image: data.cover_image,
           content,
         };
       })

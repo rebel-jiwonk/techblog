@@ -88,6 +88,19 @@ export default function BlogGrid({
               key={post.slug}
               className="block border border-base-300 dark:border-base-600 p-6 bg-base-50 dark:bg-base-800 hover:bg-base-100 dark:hover:bg-base-700 transition-colors"
             >
+              {post.cover_image ? (
+                <Image
+                  src={post.cover_image}
+                  alt={post.title}
+                  width={360}
+                  height={160}
+                  className="rounded mb-3 object-cover"
+                />
+              ) : (
+                <div className="w-full h-[160px] bg-gray-100 mb-3 flex items-center justify-center text-xs text-gray-500">
+                  No Image
+                </div>
+              )}
               <Link href={`/${post.lang}/blog/${post.slug}`}>
                 <h3 className="font-bold text-lg text-base-800 dark:text-base-50">{post.title}</h3>
               </Link>

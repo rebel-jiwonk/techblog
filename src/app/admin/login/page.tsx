@@ -1,56 +1,48 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
-export default function ResetPasswordPage() {
+export default function AdminLoginPage() {
   const router = useRouter();
-  const [newPassword, setNewPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const init = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        alert("No active session. Please use the password reset link sent to your email.");
-        router.push("/admin/login");
-      }
-    };
-
-    init();
-  }, [router]);
-
-  const handleResetPassword = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
-      alert("Failed to reset password: " + error.message);
-      setLoading(false);
-      return;
+      alert("Login failed: " + error.message);
+    } else {
+      router.push("/admin/posts");
     }
 
-    alert("Password updated. You can now log in.");
-    router.push("/admin/login");
     setLoading(false);
   };
 
   return (
     <div className="p-8 max-w-md mx-auto">
-      <h1 className="text-xl font-bold mb-4">Reset Your Password</h1>
-      <form onSubmit={handleResetPassword} className="space-y-4">
+      <h1 className="text-xl font-bold mb-4">Admin Login</h1>
+      <form onSubmit={handleLogin} className="space-y-4">
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full border p-2"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
         <input
           type="password"
-          placeholder="New Password"
+          placeholder="Password"
           className="w-full border p-2"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           required
         />
         <button
@@ -58,9 +50,18 @@ export default function ResetPasswordPage() {
           className="w-full bg-black text-white py-2"
           disabled={loading}
         >
-          {loading ? "Updating..." : "Update Password"}
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+
+      <div className="text-center mt-4">
+        <button
+          onClick={() => router.push("/admin/reset-password")}
+          className="text-sm text-blue-600 underline"
+        >
+          Forgot Password?
+        </button>
+      </div>
     </div>
   );
 }

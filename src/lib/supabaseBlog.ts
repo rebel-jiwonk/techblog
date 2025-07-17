@@ -56,7 +56,7 @@ export async function getAllSupabasePosts(lang: string = "en") {
         image: post.author_image || null,
       },
     ],
-    coverImage: post.cover_image || null,
+    cover_image: post.cover_image || null,
     lang: post.lang,
     content: post.content || "",
   }));
