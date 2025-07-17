@@ -15,6 +15,7 @@ interface Post {
   published: boolean;
   created_at: string;
   author_email: string;
+  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base";
   tags: string[];
   lang: "en" | "ko";
   featured: boolean;
@@ -42,7 +43,7 @@ export default function AdminPage() {
 
       const { data, error: postsError } = await supabase
         .from("posts")
-        .select("id, title, slug, published, created_at, author_email, tags, lang, description, featured")
+        .select("id, title, slug, published, created_at, author_email, tags, lang, description, category, featured")
         .order("created_at", { ascending: false });
 
       if (!postsError) setPosts(data || []);
