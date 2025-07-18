@@ -44,6 +44,7 @@ export async function getAllPosts(lang: "ko" | "en"): Promise<BlogPost[]> {
           authors: data.authors,
           lang: lang as "en" | "ko",
           cover_image: data.cover_image,
+          category: data.category,
           content,
         };
       })

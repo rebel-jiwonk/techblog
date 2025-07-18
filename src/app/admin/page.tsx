@@ -162,12 +162,18 @@ export default function AdminPage() {
                 <div>
                   <div className="flex items-center gap-3 mb-1">
                     <span
-                      className={`text-xs px-2 py-0.5 font-mono uppercase ${
-                        post.category
-                          ? "bg-black text-white dark:bg-white dark:text-black"
-                          : "bg-yellow-100 text-yellow-800 border border-yellow-300 dark:bg-yellow-200 dark:text-yellow-900"
-                      }`}
-                      style={{ backgroundColor: "white", color: "#1B1F23" }} // Matches base-800
+                      className="text-xs px-2 py-0.5 font-mono uppercase border"
+                      style={{
+                        backgroundColor: post.category
+                          ? "var(--base-800)"
+                          : "var(--accent-yellow)",
+                        color: post.category
+                          ? "var(--base-50)"
+                          : "var(--base-800)",
+                        borderColor: post.category
+                          ? "var(--base-800)"
+                          : "var(--accent-yellow)",
+                      }}
                     >
                       {post.category || "카테고리 아직 없음"}
                     </span>
@@ -180,7 +186,7 @@ export default function AdminPage() {
                     </Link>
                   </div>
 
-                  <div className="flex items-center gap-2 mt-1 mb-2">
+                  <div className="flex items-center gap-2 mt-3 mb-3">
                     {author?.image && (
                       <Image
                         src={author.image}
@@ -231,8 +237,8 @@ export default function AdminPage() {
                     onClick={() => toggleFeatured(post)}
                     className={`text-xs px-2 py-1 border ${
                       post.featured
-                        ? "border-purple-300 text-purple-600 hover:bg-purple-100"
-                        : "border-gray-200 text-gray-300 hover:bg-gray-100 hover:text-gray-600"
+                        ? "border-purple-300 text-purple-600 bg-purple-50 hover:bg-purple-100"
+                        : "border-gray-200 text-purple-600 bg-purple-50 hover:bg-purple-100 hover:text-purple-600"
                     }`}
                   >
                     {post.featured ? "Unfeature" : "Feature"}
@@ -240,14 +246,14 @@ export default function AdminPage() {
 
                   <button
                     onClick={() => togglePublish(post)}
-                    className="text-xs px-2 py-1 border border-blue-300 text-blue-600 hover:bg-blue-100"
+                    className="text-xs px-2 py-1 border border-blue-300 bg-blue-50 text-blue-600 hover:bg-blue-100"
                   >
                     {post.published ? "Unpublish" : "Publish"}
                   </button>
 
                   <Link
                     href={`/admin/posts/${post.id}`}
-                    className="text-xs px-2 py-1 border border-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                    className="text-xs px-2 py-1 border font-mono text-gray-600 border-gray-400 bg-gray-50 hover:bg-gray-200 hover:text-gray-600"
                   >
                     Edit
                   </Link>
@@ -264,7 +270,7 @@ export default function AdminPage() {
 
                       setPosts((prev) => prev.filter((p) => p.id !== post.id));
                     }}
-                    className="text-xs px-2 py-1 border border-red-300 text-red-600 hover:bg-red-100"
+                    className="text-xs px-2 py-1 border border-red-300 text-red-600 bg-red-50 hover:bg-red-100"
                   >
                     Delete
                   </button>
