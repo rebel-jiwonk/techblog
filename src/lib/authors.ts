@@ -5,7 +5,7 @@ export const AUTHORS: Record<
   "jiwon.k@rebellions.ai": {
     name_en: "Jiwon Kwak",
     name_ko: "곽지원",
-    image: "/authors/hug.png",
+    image: "/authors/jiwon.jpg",
   },
   "kjlee@rebellions.ai": {
     name_en: "Jae",
