@@ -95,7 +95,7 @@ export default function AdminPage() {
         {userEmail && (
           <button
             onClick={handleLogout}
-            className="text-sm border border-gray-400 px-3 py-1 hover:bg-gray-100"
+            className="text-sm border border-gray-400 px-3 py-1 hover:bg-gray-100 hover hover:text-gray-600"
           >
             Logout ({userEmail})
           </button>
@@ -232,7 +232,7 @@ export default function AdminPage() {
                     className={`text-xs px-2 py-1 border ${
                       post.featured
                         ? "border-purple-300 text-purple-600 hover:bg-purple-100"
-                        : "border-gray-300 text-gray-100 hover:bg-gray-100 hover:text-gray-600"
+                        : "border-gray-200 text-gray-300 hover:bg-gray-100 hover:text-gray-600"
                     }`}
                   >
                     {post.featured ? "Unfeature" : "Feature"}

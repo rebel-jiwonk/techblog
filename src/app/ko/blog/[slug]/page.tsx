@@ -136,8 +136,9 @@ export default async function BlogPostPage({ params }: StaticParams) {
             </span>
           </div>
           <div className="flex justify-center flex-wrap gap-2 mb-4">
-            {post.tags?.map((tag: string, i: number) => (
+            {post.tags?.map((tag: string) => (
               <span
+                key={tag}
                 className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${
                   tagColors[tag] || "bg-base-200"
                 }`}
