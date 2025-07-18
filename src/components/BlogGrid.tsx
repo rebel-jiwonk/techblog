@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { BlogPost } from "@/types";
 import { AUTHORS } from "@/lib/authors";
 import Image from "next/image";
-import { tagColors } from "@/lib/tagColors"; // Still used for tag-specific colors
+import { tagColors } from "@/lib/tagColors"; // Tag-specific color mapping
 
 export default function BlogGrid({
   initialPosts,
@@ -31,13 +31,14 @@ export default function BlogGrid({
     "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements"
   > = ["Benchmark", "Tutorials", "Retrospectives", "Knowledge Base", "Announcements"];
 
-  // Filtering logic
+  // Filter posts based on category and tag
   const filteredPosts = initialPosts.filter((post) => {
     const tagMatch = filterByTag ? post.tags.includes(filterByTag) : true;
     const categoryMatch = filterByCategory ? post.category === filterByCategory : true;
     return tagMatch && categoryMatch;
   });
 
+  // Toggle category
   const handleCategoryClick = (category: typeof filterByCategory) => {
     setFilterByCategory(filterByCategory === category ? null : category);
   };
@@ -45,44 +46,47 @@ export default function BlogGrid({
   return (
     <section className="space-y-8 relative">
       {/* Category Filter Bar */}
-      <div className="top-0 z-50 bg-base-50 dark:bg-base-800 py-3 border-b border-base-200 dark:border-base-600">
+      <div className="top-0 z-50 bg-[var(--base-50)] dark:bg-[var(--base-800)] py-3 border-b border-[var(--base-200)] dark:border-[var(--base-600)]">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-base-800 dark:text-base-50">Articles</h2>
+          <h2 className="text-2xl font-bold ml-3 text-[var(--base-800)] dark:text-[var(--base-50)]">
+            Articles
+          </h2>
 
-          <div className="flex flex-wrap gap-2">
+          {/* Categories */}
+          <div className="flex flex-wrap gap-3 pr-3">
+            {/* Show All */}
+            <button
+              onClick={() => setFilterByCategory(null)}
+              className={`px-3 py-1 text-xs font-semibold uppercase border transition-colors ${
+                filterByCategory === null
+                  ? "bg-[var(--accent-green)] text-black border-[var(--accent-green)]"
+                  : "bg-[var(--background)] text-black border-[var(--base-300)] dark:bg-[var(--base-700)] dark:text-white dark:border-[var(--base-600)]"
+              }`}
+              style={{ fontFamily: "Space Mono, monospace" }}
+            >
+              Show All
+            </button>
+
             {categories.map((category, i) => (
               <button
                 key={i}
                 onClick={() => handleCategoryClick(category)}
-                className="px-3 py-1 text-xs font-semibold uppercase border transition-colors"
-                style={{
-                  fontFamily: "Space Mono, monospace",
-                  backgroundColor:
-                    filterByCategory === category ? "var(--accent-green)" : "var(--background)",
-                  color: filterByCategory === category ? "black" : "var(--foreground)",
-                  borderColor:
-                    filterByCategory === category
-                      ? "var(--accent-green)"
-                      : "var(--base-300)",
-                }}
+                className={`px-3 py-1 text-xs font-semibold uppercase border transition-colors ${
+                  filterByCategory === category
+                    ? "bg-[var(--accent-green)] text-black border-[var(--accent-green)]"
+                    : "bg-[var(--background)] text-black border-[var(--base-300)] dark:bg-[var(--base-700)] dark:text-white dark:border-[var(--base-600)]"
+                }`}
+                style={{ fontFamily: "Space Mono, monospace" }}
               >
                 {category}
               </button>
             ))}
-            {filterByCategory && (
-              <button
-                onClick={() => setFilterByCategory(null)}
-                className="px-3 py-1 text-xs font-semibold border text-red-500 border-red-300"
-              >
-                Clear
-              </button>
-            )}
           </div>
         </div>
 
         {/* Active Filters */}
         {filterByTag && (
-          <div className="mt-3 flex items-center gap-4 text-sm text-base-500">
+          <div className="mt-3 flex items-center gap-4 text-sm text-[var(--base-500)]">
             <span>{labels.filteringBy}</span>
             <span
               className="px-2 py-1 text-xs font-mono font-semibold rounded"
@@ -112,28 +116,32 @@ export default function BlogGrid({
           return (
             <div
               key={post.slug}
-              className="block border border-base-300 dark:border-base-600 p-6 bg-base-50 dark:bg-base-800 hover:bg-base-100 dark:hover:bg-base-700 transition-colors"
+              className="block border border-[var(--base-300)] dark:border-[var(--base-600)] p-6 bg-[var(--base-50)] dark:bg-[var(--base-800)] hover:bg-[var(--base-100)] dark:hover:bg-[var(--base-700)] transition-colors"
             >
+              {/* Cover Image */}
               {post.cover_image ? (
                 <Image
                   src={post.cover_image}
                   alt={post.title}
                   width={360}
                   height={160}
-                  className="rounded mb-3 object-cover"
+                  className="rounded mb-4 object-cover"
                 />
               ) : (
-                <div className="w-full h-[160px] bg-gray-100 mb-3 flex items-center justify-center text-xs text-gray-500">
+                <div className="w-full h-[160px] bg-gray-100 mb-4 flex items-center justify-center text-xs text-gray-500">
                   No Image
                 </div>
               )}
 
+              {/* Title */}
               <Link href={`/${post.lang}/blog/${post.slug}`}>
-                <h3 className="font-bold text-lg text-base-800 dark:text-base-50">{post.title}</h3>
+                <h3 className="font-bold text-lg text-[var(--base-800)] dark:text-[var(--base-50)] mb-2">
+                  {post.title}
+                </h3>
               </Link>
 
               {/* Meta Info */}
-              <p className="text-sm text-base-500 mt-2 flex flex-wrap items-center gap-2">
+              <p className="text-sm text-[var(--base-500)] mb-3 flex flex-wrap items-center gap-2">
                 <span>{formattedDate}</span>
                 {post.authors?.length > 0 && (
                   <span className="flex flex-wrap items-center gap-2">
@@ -158,13 +166,13 @@ export default function BlogGrid({
 
               {/* Tags */}
               {post.tags?.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
+                <div className="flex flex-wrap gap-2 mb-3">
                   {post.tags.map((tag, i) => (
                     <button
                       key={i}
                       onClick={() => setFilterByTag(tag)}
                       className={`text-xs font-mono font-medium px-3 py-1 border ${
-                        tagColors[tag] || "bg-base-200 text-black"
+                        tagColors[tag] || "bg-[var(--base-200)] text-black"
                       }`}
                       style={{
                         fontFamily: "'Space Mono', monospace",
@@ -177,7 +185,10 @@ export default function BlogGrid({
                 </div>
               )}
 
-              <p className="text-sm text-base-600 dark:text-base-400 mt-3">{post.description}</p>
+              {/* Description */}
+              <p className="text-sm text-[var(--base-600)] dark:text-[var(--base-400)]">
+                {post.description}
+              </p>
             </div>
           );
         })}

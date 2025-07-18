@@ -5,29 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { tagColors } from "@/lib/tagColors";
 
-// const tagColors: Record<string, string> = {
-//   Performance: "bg-[#FFF9E3]",
-//   Solution: "bg-[#CDA7FF]",
-//   Optimization: "bg-[#FFECF4]",
-//   Hardware: "bg-[#E9EEFD]",
-//   Tools: "bg-[#BBC9FA]",
-//   Quantization: "bg-[#ECFAED]",
-//   Tutorials: "bg-[#FF9E9B]",
-//   Demos: "bg-[#C5EDC5]",
-//   Industry: "bg-[#FFF3C6]",
-//   Release: "bg-[#9CE19D]",
-//   퍼포먼스: "bg-[#FFF9E3]",
-//   최적화: "bg-[#FFECF4]",
-//   하드웨어: "bg-[#E9EEFD]",
-//   솔루션: "bg-[#CDA7FF]",
-//   양자화: "bg-[#ECFAED]",
-//   툴: "bg-[#BBC9FA]",
-//   튜토리얼: "bg-[#FF9E9B]",
-//   데모: "bg-[#C5EDC5]",
-//   산업: "bg-[#FFF3C6]",
-//   릴리즈: "bg-[#9CE19D]",
-// };
-
 type Post = {
   title: string;
   slug: string;
@@ -38,72 +15,73 @@ type Post = {
 };
 
 export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
-
   const [, setFilterByTag] = useState<string | null>(null);
 
   return (
-  <div className="mb-12 overflow-x-auto">
-    <div className="flex gap-6">
-      {posts.map((post, index) => {
-        const formattedDate = new Date(post.created_at).toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-        });
+    <div className="mb-12 overflow-x-auto">
+      <div className="flex gap-6">
+        {posts.map((post, index) => {
+          const formattedDate = new Date(post.created_at).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
 
-        return (
-          <Link
-            key={index}
-            href={`/${post.lang}/blog/${post.slug}`}
-            className="min-w-[330px] max-w-[300px] bg-base-100 dark:bg-base-700 rounded border border-base-200 dark:border-base-600 shadow-sm p-4 flex-shrink-0"
-          >
-            <Image
-              src={post.cover_image}
-              alt={post.title}
-              width={300}
-              height={160}
-              className="rounded mb-3 object-contain"
-            />
-            
-            {/* Fixed-width text container */}
-            <div className="flex flex-col w-[300px]">
-              <span className="text-sm text-base-500 mb-2 block">
-                {formattedDate}
-              </span>
+          return (
+            <Link
+              key={index}
+              href={`/${post.lang}/blog/${post.slug}`}
+              className="min-w-[330px] max-w-[300px] bg-[var(--base-50)] dark:bg-[var(--base-700)] border border-[var(--base-200)] dark:border-[var(--base-600)] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all p-4 flex-shrink-0"
+              style={{ borderRadius: "4px" }}
+            >
+              <Image
+                src={post.cover_image}
+                alt={post.title}
+                width={300}
+                height={160}
+                className="rounded mb-3 object-cover"
+              />
 
-              <div
-                className="font-semibold text-base-800 dark:text-base-50 mb-1 overflow-hidden"
-                style={{
-                  display: "-webkit-box",
-                  WebkitLineClamp: 2,
-                  WebkitBoxOrient: "vertical",
-                }}
-              >
-                {post.title}
+              {/* Text Container */}
+              <div className="flex flex-col w-[300px]">
+                <span className="text-sm text-[var(--base-500)] mb-2 block">
+                  {formattedDate}
+                </span>
+
+                <div
+                  className="font-semibold text-[var(--base-800)] dark:text-[var(--base-50)] mb-2 overflow-hidden"
+                  style={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  }}
+                >
+                  {post.title}
+                </div>
+
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2 mt-2 text-xs">
+                  {post.tags?.map((tag, i) => (
+                    <span
+                      key={i}
+                      onClick={() => setFilterByTag(tag)}
+                      className={`text-xs font-mono font-medium px-3 py-1 border border-[var(--base-300)] ${
+                        tagColors[tag] || "bg-[var(--base-200)] text-black"
+                      }`}
+                      style={{
+                        fontFamily: "'Space Mono', monospace",
+                        borderRadius: "0px",
+                      }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
               </div>
-
-              <div className="flex flex-wrap gap-2 mt-2 text-xs">
-                {post.tags?.map((tag, i) => (
-                  <span
-                    key={i}
-                    onClick={() => setFilterByTag(tag)}
-                    className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${
-                      tagColors[tag] || "bg-base-200"
-                    }`}
-                    style={{
-                      fontFamily: "'Space Mono', monospace",
-                      borderRadius: "0px",
-                    }}
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </Link>
-        );
-      })}
+            </Link>
+          );
+        })}
+      </div>
     </div>
-  </div>
   );
 }
