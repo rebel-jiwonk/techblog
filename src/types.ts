@@ -4,6 +4,7 @@ export type BlogPost = {
   slug: string;
   description: string;
   created_at: string;
+  category?: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base"| "Announcements";
   tags: string[];
   authors: {
     name: string;
@@ -11,5 +12,5 @@ export type BlogPost = {
   }[];
   lang: "en" | "ko";
   content: string;
- cover_image?: string | null;
+  cover_image?: string | null;
 };

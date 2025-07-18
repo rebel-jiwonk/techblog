@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: StaticParams) {
 
   const { data: post, error } = await supabase
     .from("posts")
-    .select("title, slug, created_at, lang, author_email, author_image, description, tags, content, cover_image")
+    .select("title, slug, created_at, lang, author_email, author_image, description, category, tags, content, cover_image")
     .eq("slug", slug)
     .eq("lang", lang)
     .eq("published", true)
