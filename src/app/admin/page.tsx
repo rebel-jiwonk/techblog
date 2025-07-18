@@ -161,16 +161,25 @@ export default function AdminPage() {
                 className="border border-gray-300 p-4 shadow-sm flex items-center justify-between"
               >
                 <div>
-                  <Link
-                    href={`/${post.lang}/blog/${post.slug}`}
-                    title="Go to post?"
-                    className="hover:underline"
-                  >
-                    <h2 className="text-xl font-semibold cursor-pointer">{post.title}</h2>
-                  </Link>
-                  <span className="text-xs px-2 py-0.5 bg-black text-white font-mono uppercase">
-                    {post.category}
-                  </span>
+                  <div className="flex items-center gap-3 mb-1">
+                    <span
+                      className={`text-xs px-2 py-0.5 font-mono uppercase ${
+                        post.category
+                          ? "bg-black text-white"
+                          : "bg-yellow-100 text-yellow-800 border border-yellow-300"
+                      }`}
+                    >
+                      {post.category || "카테고리 아직 없음"}
+                    </span>
+
+                    <Link
+                      href={`/${post.lang}/blog/${post.slug}`}
+                      title="Go to post?"
+                      className="hover:underline"
+                    >
+                      <h2 className="text-xl font-semibold cursor-pointer">{post.title}</h2>
+                    </Link>
+                  </div>
 
                   <div className="flex items-center gap-2 mt-1">
                     {author?.image && (
