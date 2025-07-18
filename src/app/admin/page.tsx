@@ -1,4 +1,3 @@
-// src/app/admin/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -165,13 +164,13 @@ export default function AdminPage() {
                     <span
                       className={`text-xs px-2 py-0.5 font-mono uppercase ${
                         post.category
-                          ? "bg-black text-white"
-                          : "bg-yellow-100 text-yellow-800 border border-yellow-300"
+                          ? "bg-black text-white dark:bg-white dark:text-black"
+                          : "bg-yellow-100 text-yellow-800 border border-yellow-300 dark:bg-yellow-200 dark:text-yellow-900"
                       }`}
+                      style={{ backgroundColor: "white", color: "#1B1F23" }} // Matches base-800
                     >
                       {post.category || "카테고리 아직 없음"}
                     </span>
-
                     <Link
                       href={`/${post.lang}/blog/${post.slug}`}
                       title="Go to post?"
@@ -181,7 +180,7 @@ export default function AdminPage() {
                     </Link>
                   </div>
 
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center gap-2 mt-1 mb-2">
                     {author?.image && (
                       <Image
                         src={author.image}
@@ -191,23 +190,31 @@ export default function AdminPage() {
                         height={20}
                       />
                     )}
-                    <p className="text-sm text-gray-600">Author: {displayName}</p>
+                    <span className="text-sm font-semibold text-base-600 dark:text-white">
+                      Author:
+                    </span>
+                    <span className="text-sm text-base-400 dark:text-gray-300">
+                      {displayName}
+                    </span>
                   </div>
 
-                  {post.tags?.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {post.tags.map((tag, i) => (
-                        <span
-                          key={i}
-                          className={`text-xs px-2 py-0.5 ${
-                            tagColors[tag] || "bg-gray-200 text-gray-700"
-                          }`}
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
+              {post.tags?.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {post.tags.map((tag, i) => (
+                    <span
+                      style={{ fontFamily: "'Space Mono', monospace" }}
+                      key={i}
+                      className={`text-xs px-2 py-0.5 font-mono uppercase  ${
+                        tagColors[tag] || "bg-gray-200"
+                      } text-gray-700 dark:text-gray-200`}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+
                 </div>
                 <div className="flex gap-3 items-center">
                   <span
@@ -225,7 +232,7 @@ export default function AdminPage() {
                     className={`text-xs px-2 py-1 border ${
                       post.featured
                         ? "border-purple-300 text-purple-600 hover:bg-purple-100"
-                        : "border-gray-300 text-gray-600 hover:bg-gray-100"
+                        : "border-gray-300 text-gray-100 hover:bg-gray-100 hover:text-gray-600"
                     }`}
                   >
                     {post.featured ? "Unfeature" : "Feature"}
@@ -240,7 +247,7 @@ export default function AdminPage() {
 
                   <Link
                     href={`/admin/posts/${post.id}`}
-                    className="text-xs px-2 py-1 border border-gray-400 hover:bg-gray-100"
+                    className="text-xs px-2 py-1 border border-gray-400 hover:bg-gray-100 hover:text-gray-600"
                   >
                     Edit
                   </Link>
