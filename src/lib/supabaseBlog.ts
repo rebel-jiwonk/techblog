@@ -10,6 +10,7 @@ interface SupabasePost {
   description?: string;
   tags?: string[];
   cover_image?: string;
+  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements" ;
   content?: string;
   lang: "en" | "ko"; // ✅ Add this line
 }

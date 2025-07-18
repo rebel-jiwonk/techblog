@@ -11,32 +11,41 @@ import remarkGfm from "remark-gfm";
 import GithubSlugger from "github-slugger";
 import Image from "next/image";
 import TableOfContents from "@/components/TableOfContents";
+import { tagColors } from "@/lib/tagColors";
 
 const slugger = new GithubSlugger();
 slugger.reset();
 
-const tagColors: Record<string, string> = {
-  Performance: "bg-[#FFF9E3]",
-  Solution: "bg-[#CDA7FF]",
-  Optimization: "bg-[#FFECF4]",
-  Hardware: "bg-[#E9EEFD]",
-  Tools: "bg-[#BBC9FA]",
-  Quantization: "bg-[#ECFAED]",
-  Tutorials: "bg-[#FF9E9B]",
-  Demos: "bg-[#C5EDC5]",
-  Industry: "bg-[#FFF3C6]",
-  Release: "bg-[#9CE19D]",
-  퍼포먼스: "bg-[#FFF9E3]",
-  최적화: "bg-[#FFECF4]",
-  하드웨어: "bg-[#E9EEFD]",
-  솔루션: "bg-[#CDA7FF]",
-  양자화: "bg-[#ECFAED]",
-  툴: "bg-[#BBC9FA]",
-  튜토리얼: "bg-[#FF9E9B]",
-  데모: "bg-[#C5EDC5]",
-  산업: "bg-[#FFF3C6]",
-  릴리즈: "bg-[#9CE19D]",
-};
+const categories = [
+  "Benchmark",
+  "Tutorials",
+  "Retrospectives",
+  "Knowledge Base",
+  "Announcements",
+] as const;
+
+// const tagColors: Record<string, string> = {
+//   Performance: "bg-[#FFF9E3]",
+//   Solution: "bg-[#CDA7FF]",
+//   Optimization: "bg-[#FFECF4]",
+//   Hardware: "bg-[#E9EEFD]",
+//   Tools: "bg-[#BBC9FA]",
+//   Quantization: "bg-[#ECFAED]",
+//   Tutorials: "bg-[#FF9E9B]",
+//   Demos: "bg-[#C5EDC5]",
+//   Industry: "bg-[#FFF3C6]",
+//   Release: "bg-[#9CE19D]",
+//   퍼포먼스: "bg-[#FFF9E3]",
+//   최적화: "bg-[#FFECF4]",
+//   하드웨어: "bg-[#E9EEFD]",
+//   솔루션: "bg-[#CDA7FF]",
+//   양자화: "bg-[#ECFAED]",
+//   툴: "bg-[#BBC9FA]",
+//   튜토리얼: "bg-[#FF9E9B]",
+//   데모: "bg-[#C5EDC5]",
+//   산업: "bg-[#FFF3C6]",
+//   릴리즈: "bg-[#9CE19D]",
+// };
 
 interface Post {
   id: string;
@@ -48,6 +57,7 @@ interface Post {
   author_email: string;
   tags: string[];
   description?: string;
+  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements" ;
   cover_image?: string;
 }
 
@@ -117,7 +127,11 @@ export default function Page() {
         return;
       }
 
-      setPost({ ...data, tags: data.tags ?? [] });
+      setPost({
+        ...data,
+        tags: data.tags ?? [],
+        category: data.category ?? "Knowledge Base", // fallback
+      });
       setLoading(false);
     }
 
@@ -235,17 +249,36 @@ export default function Page() {
     </div>
 
     <div>
+      <label className="block text-sm font-bold mb-1">CATEGORY</label>
+      <select
+        value={post.category}
+        onChange={(e) =>
+          setPost({ ...post, category: e.target.value as Post["category"] })
+        }
+        className="w-full p-2 border focus:ring-2 focus:ring-black"
+      >
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <div>
       <label className="block text-sm font-bold mb-1">TAGS</label>
       <div className="flex flex-wrap gap-2">
         {availableTags.map((tag) => (
           <button
             key={tag}
             type="button"
-            className={`px-2 py-1 text-sm border ${
-              post.tags.includes(tag)
-                ? `${tagColors[tag]} text-black border-black`
-                : "bg-gray-100 text-gray-600 border-gray-300"
+            className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black dark:text-black ${
+              tagColors[tag] || "bg-base-200"
             }`}
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              borderRadius: "0px",
+            }}
             onClick={() =>
               setPost((prev) => ({
                 ...prev!,
