@@ -317,12 +317,21 @@ export default function Page() {
           <article className="prose prose-lg dark:prose-invert max-w-none
             prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
             prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4
-            prose-table:table-auto prose-th:border prose-td:border prose-th:border-gray-300 prose-td:border-gray-200 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2
+            prose-table:table-auto prose-table:w-full prose-th:border prose-td:border
+            prose-th:border-gray-300 prose-td:border-gray-200 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2
             prose-blockquote:bg-[#F0F8FF] prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:rounded-md prose-blockquote:border-l-4 prose-blockquote:border-blue-400 prose-blockquote:text-gray-900"
           >
             <ReactMarkdown
-              remarkPlugins={[remarkBreaks, remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
+                remarkPlugins={[remarkBreaks, remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                // components={{
+                //   ol: ({ node, ...props }) => (
+                //     <ol className="list-decimal ml-6 marker:font-bold marker:text-black" {...props} />
+                //   ),
+                //   ul: ({ node, ...props }) => (
+                //     <ul className="list-disc ml-6" {...props} />
+                //   ),
+                // }}
             >
               {post.content}
             </ReactMarkdown>
