@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { supabase } from "@/lib/supabaseClient";
+// import { supabase } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 export default function ResetPasswordPage() {
@@ -11,31 +11,27 @@ export default function ResetPasswordPage() {
   const [loading, setLoading] = useState(false);
 
   const handleReset = async () => {
-    setLoading(true);
-
-    const { data, error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password: newPassword, // this is just to get a session, not a real login
+  setLoading(true);
+  try {
+    const response = await fetch("/api/admin-reset-password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, newPassword }),
     });
 
-    if (!signInError && data.user) {
-      alert("You are already logged in. Go to the dashboard instead.");
-      router.push("/admin/dashboard");
-      return;
-    }
-
-    // Use Supabase Admin API to update user password (not available from client SDK by default)
-    const { error } = await supabase.auth.updateUser({ password: newPassword });
-
-    if (error) {
-      alert("Reset failed: " + error.message);
-    } else {
+    const result = await response.json();
+    if (response.ok) {
       alert("Password updated. Please log in.");
       router.push("/admin/login");
+    } else {
+      alert("Reset failed: " + result.error);
     }
-
+  } catch (err) {
+    alert("Unexpected error: " + err);
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
   return (
     <div className="p-8 max-w-md mx-auto">

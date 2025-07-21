@@ -19,11 +19,30 @@ export default function AdminLoginPage() {
     if (error) {
       alert("Login failed: " + error.message);
     } else {
-      router.push("/admin/posts");
+      router.push("/admin");
     }
 
     setLoading(false);
   };
+
+  // const handleSignUp = async () => {
+  //   const newEmail = window.prompt("Enter new admin email:");
+  //   if (!newEmail) return;
+
+  //   const newPassword = window.prompt("Enter a password for this admin:");
+  //   if (!newPassword) return;
+
+  //   const { data, error } = await supabase.auth.signUp({
+  //     email: newEmail,
+  //     password: newPassword,
+  //   });
+
+  //   if (error) {
+  //     alert("Sign-up failed: " + error.message);
+  //   } else {
+  //     alert(`Admin account created for ${newEmail}. Please log in.`);
+  //   }
+  // };
 
   return (
     <div className="p-8 max-w-md mx-auto">
@@ -54,13 +73,25 @@ export default function AdminLoginPage() {
         </button>
       </form>
 
-      <div className="text-center mt-4">
-        <button
+      <div className="text-center mt-4 space-y-2">
+        {/* <button
           onClick={() => router.push("/admin/reset-password")}
-          className="text-sm text-blue-600 underline"
+          className="text-sm text-blue-600 underline block"
         >
           Forgot Password?
+        </button> */}
+        <button
+          onClick={() => router.push("/reset-password")}
+          className="text-sm text-green-600 underline block"
+        >
+          Change Password
         </button>
+        {/* <button
+          onClick={handleSignUp}
+          className="text-sm text-purple-600 underline block"
+        >
+          Sign Up
+        </button> */}
       </div>
     </div>
   );
