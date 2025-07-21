@@ -255,10 +255,19 @@ button,
 
 .prose table { /* Force equal-width columns */
   width: 100%;
+  border-collapse: collapse; /* Ensures no spacing between cells */
+  border: 1px solid var(--base-300); /* Add outer border */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures no spacing between cells */
+  border: 1px solid var(--base-300); /* Add outer border */
 }
 
 .prose th,
 .prose td {
+  border: 1px solid var(--base-300); /* Add cell borders */
   word-break: keep-all;
   white-space: nowrap;
   padding: 0.75rem;
@@ -268,6 +277,7 @@ button,
 
 
 th, td {
+  border: 1px solid var(--base-300); /* Add cell borders */
   word-break: keep-all;
   white-space: nowrap;
   padding: 0.75rem;
@@ -275,10 +285,22 @@ th, td {
   vertical-align: top;
 }
 
+.dark .prose table {
+  border: 1px solid var(--base-600);
+}
+
+.dark table {
+  border: 1px solid var(--base-600);
+}
+
 
 .dark .prose th,
 .dark .prose td {
   border-color: var(--base-600);
+}
+
+.dark th, td {
+  border: 1px solid var(--base-600);
 }
 
 /* =========================
