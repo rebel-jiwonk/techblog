@@ -10,6 +10,7 @@ interface SupabasePost {
   description?: string;
   tags?: string[];
   cover_image?: string;
+  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements" ;
   content?: string;
   lang: "en" | "ko"; // ✅ Add this line
 }
@@ -17,7 +18,7 @@ interface SupabasePost {
 export async function getFeaturedPosts(lang = "en") {
   const { data, error } = await supabase
     .from("posts")
-    .select("id, title, slug, created_at, tags, cover_image, content, lang, author_email, author_image")
+    .select("id, title, slug, created_at, tags, cover_image, content, category, lang, author_email, author_image")
     .eq("featured", true)
     .eq("lang", lang)
     .eq("published", true)
@@ -32,7 +33,7 @@ export async function getAllSupabasePosts(lang: string = "en") {
   const { data, error } = await supabase
     .from("posts")
     .select(
-      "id, title, slug, created_at, author_email, author_image, description, tags, cover_image, content, lang"
+      "id, title, slug, created_at, author_email, author_image, description, tags, cover_image, category, content, lang"
     )
     .eq("lang", lang)
     .eq("published", true)
@@ -57,6 +58,7 @@ export async function getAllSupabasePosts(lang: string = "en") {
       },
     ],
     cover_image: post.cover_image || null,
+    category: post.category || "Accouncements",
     lang: post.lang,
     content: post.content || "",
   }));

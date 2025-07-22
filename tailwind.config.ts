@@ -26,8 +26,13 @@ const config: Config = {
           700: "#23292F",
           800: "#1B1F23", // use this for dark bg
         },
-        accent: {
+         accent: {
           green: "#52F756",
+          yellow: "#FFD527",      // for tag filter active
+          greenStrong: "#00C42E", // for author filter active
+          blue: "#174BEB",
+          purple: "#9A4EFF",
+          pink: "#F7318B",
         },
       },
       borderRadius: {

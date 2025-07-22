@@ -11,32 +11,18 @@ import remarkGfm from "remark-gfm";
 import GithubSlugger from "github-slugger";
 import Image from "next/image";
 import TableOfContents from "@/components/TableOfContents";
+import { tagColors } from "@/lib/tagColors";
 
 const slugger = new GithubSlugger();
 slugger.reset();
 
-const tagColors: Record<string, string> = {
-  Performance: "bg-[#FFF9E3]",
-  Solution: "bg-[#CDA7FF]",
-  Optimization: "bg-[#FFECF4]",
-  Hardware: "bg-[#E9EEFD]",
-  Tools: "bg-[#BBC9FA]",
-  Quantization: "bg-[#ECFAED]",
-  Tutorials: "bg-[#FF9E9B]",
-  Demos: "bg-[#C5EDC5]",
-  Industry: "bg-[#FFF3C6]",
-  Release: "bg-[#9CE19D]",
-  퍼포먼스: "bg-[#FFF9E3]",
-  최적화: "bg-[#FFECF4]",
-  하드웨어: "bg-[#E9EEFD]",
-  솔루션: "bg-[#CDA7FF]",
-  양자화: "bg-[#ECFAED]",
-  툴: "bg-[#BBC9FA]",
-  튜토리얼: "bg-[#FF9E9B]",
-  데모: "bg-[#C5EDC5]",
-  산업: "bg-[#FFF3C6]",
-  릴리즈: "bg-[#9CE19D]",
-};
+const categories = [
+  "Benchmark",
+  "Tutorials",
+  "Retrospectives",
+  "Knowledge Base",
+  "Announcements",
+] as const;
 
 interface Post {
   id: string;
@@ -48,6 +34,7 @@ interface Post {
   author_email: string;
   tags: string[];
   description?: string;
+  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements" ;
   cover_image?: string;
 }
 
@@ -117,7 +104,11 @@ export default function Page() {
         return;
       }
 
-      setPost({ ...data, tags: data.tags ?? [] });
+      setPost({
+        ...data,
+        tags: data.tags ?? [],
+        category: data.category ?? "Knowledge Base", // fallback
+      });
       setLoading(false);
     }
 
@@ -128,8 +119,8 @@ export default function Page() {
   if (!post) return <div>Post not found</div>;
 
   const availableTags = Object.keys(tagColors).filter((tag) =>
-    post?.lang === "en" ? /^[a-zA-Z]+$/.test(tag) : /[가-힣]/.test(tag)
-  );
+  post?.lang === "en" ? /^[a-zA-Z0-9 ]+$/.test(tag) : /[가-힣]/.test(tag)
+);
 
   return (
   <div className="p-6 space-y-6">
@@ -235,17 +226,38 @@ export default function Page() {
     </div>
 
     <div>
+      <label className="block text-sm font-bold mb-1">CATEGORY</label>
+      <select
+        value={post.category}
+        onChange={(e) =>
+          setPost({ ...post, category: e.target.value as Post["category"] })
+        }
+        className="w-full p-2 border focus:ring-2 focus:ring-black"
+      >
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <div>
       <label className="block text-sm font-bold mb-1">TAGS</label>
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 relative z-50">
         {availableTags.map((tag) => (
           <button
             key={tag}
             type="button"
-            className={`px-2 py-1 text-sm border ${
+            className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black ${
               post.tags.includes(tag)
-                ? `${tagColors[tag]} text-black border-black`
-                : "bg-gray-100 text-gray-600 border-gray-300"
+                ? `${tagColors[tag]} ring-2 ring-black` // Highlight when selected
+                : "bg-white"
             }`}
+            style={{
+              fontFamily: "'Space Mono', monospace",
+              borderRadius: "0px",
+            }}
             onClick={() =>
               setPost((prev) => ({
                 ...prev!,
@@ -284,12 +296,21 @@ export default function Page() {
           <article className="prose prose-lg dark:prose-invert max-w-none
             prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
             prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4
-            prose-table:table-auto prose-th:border prose-td:border prose-th:border-gray-300 prose-td:border-gray-200 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2
+            prose-table:table-auto prose-table:w-full prose-th:border prose-td:border
+            prose-th:border-gray-300 prose-td:border-gray-200 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2
             prose-blockquote:bg-[#F0F8FF] prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:rounded-md prose-blockquote:border-l-4 prose-blockquote:border-blue-400 prose-blockquote:text-gray-900"
           >
             <ReactMarkdown
-              remarkPlugins={[remarkBreaks, remarkGfm]}
-              rehypePlugins={[rehypeRaw]}
+                remarkPlugins={[remarkBreaks, remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                // components={{
+                //   ol: ({ node, ...props }) => (
+                //     <ol className="list-decimal ml-6 marker:font-bold marker:text-black" {...props} />
+                //   ),
+                //   ul: ({ node, ...props }) => (
+                //     <ul className="list-disc ml-6" {...props} />
+                //   ),
+                // }}
             >
               {post.content}
             </ReactMarkdown>

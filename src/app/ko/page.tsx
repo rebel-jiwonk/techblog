@@ -46,17 +46,16 @@ export default async function KoreanHome() {
       )}
 
       {/* Blog Grid with Filters */}
-      <section>
-        <h2 className="text-2xl font-bold mb-6">Latest Posts</h2>
-        <BlogGrid
-          initialPosts={posts.slice(0, 6)}
-          labels={{
-            filteringBy: "Filtering by:",
-            clear: "Clear Filters",
-            by: "by",
-          }}
-        />
-      </section>
+        <section>
+          <BlogGrid
+            initialPosts={posts.slice(0, 6)}
+            labels={{
+              filteringBy: "Filtering by:",
+              clear: "Clear Filters",
+              by: "by",
+            }}
+          />
+        </section>
 
       {/* About Section */}
       <section className="border-t border-base-200 pt-12 space-y-4">

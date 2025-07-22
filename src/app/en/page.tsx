@@ -47,7 +47,6 @@ export default async function EnglishHome() {
 
       {/* Blog Grid with Filters */}
       <section>
-        <h2 className="text-2xl font-bold mb-6">Latest Posts</h2>
         <BlogGrid
           initialPosts={posts.slice(0, 6)}
           labels={{

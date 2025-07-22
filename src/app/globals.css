@@ -1,17 +1,6 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* =========================
+   FONT FACE DECLARATIONS
+========================= */
 @font-face {
   font-family: "Pretendard";
   src: url("/fonts/pretendard.woff2") format("woff2");
@@ -23,8 +12,56 @@
 @font-face {
   font-family: "Space Mono";
   src: url("/fonts/space-mono.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
+/* =========================
+   TAILWIND IMPORT
+========================= */
+@import "tailwindcss";
+
+/* =========================
+   CSS VARIABLES
+========================= */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+
+  /* Base colors */
+  --base-50: #F8F8FA;
+  --base-100: #EFF2F5;
+  --base-200: #E2EBF2;
+  --base-300: #D9E4ED;
+  --base-400: #BBC4CF;
+  --base-500: #808A96;
+  --base-600: #3B434B;
+  --base-700: #23292F;
+  --base-800: #1B1F23;
+
+  /* Accent colors */
+  --accent-green: #52F756;
+  --accent-yellow: #FFD527;
+  --accent-greenStrong: #00C42E;
+  --accent-blue: #174BEB;
+  --accent-purple: #9A4EFF;
+  --accent-pink: #F7318B;
+}
+
+/* =========================
+   THEME INLINE
+========================= */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: Pretendard, sans-serif;
+  --font-mono: "Space Mono", monospace;
+}
+
+/* =========================
+   TYPOGRAPHY & DEFAULTS
+========================= */
 html[lang="ko"] body {
   font-family: "Pretendard", sans-serif;
 }
@@ -32,7 +69,8 @@ html[lang="en"] body {
   font-family: "Soehne", sans-serif;
 }
 
-button, .button-text {
+button,
+.button-text {
   font-family: "Space Mono", monospace;
 }
 
@@ -43,65 +81,63 @@ button, .button-text {
   }
 }
 
-/* Enhanced blockquote styling for prose content */
+/* =========================
+   PROSE STYLING
+========================= */
 .prose blockquote {
   line-height: 1.7;
-  background-color: #F0F9FF; /* Light blue background */
-  border-left: 4px solid #60A5FA; /* Blue border */
+  background-color: #F0F9FF;
+  border-left: 4px solid #60A5FA;
   padding: 0.75rem 1rem;
-  border-radius: 0.375rem; /* Rounded edges for softer look */
+  border-radius: 0.375rem;
   font-style: italic;
   font-family: "Soehne", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: #1B1F23;
+  color: var(--base-800);
   margin: 1.5rem 0;
 }
 
-/* Override inner paragraph styling */
 .prose blockquote p {
-  font-size: 0.875rem !important; /* Slightly larger for readability */
+  font-size: 0.875rem !important;
   font-style: normal !important;
   line-height: 1.6;
   margin: 0 !important;
 }
+
 .dark .prose blockquote {
   background-color: #1E293B;
   border-left-color: #3B82F6;
   color: #E0F2FE;
 }
 
-/* 전체 코드 블록 (pre) 스타일 */
+/* Code blocks */
 .prose pre {
-  background-color: #F8F8FA !important;
+  background-color: var(--base-50) !important;
   padding: 1rem;
   border-radius: 0.375rem;
   font-size: 0.875rem;
   overflow-x: auto;
-  color: #1B1F23;
+  color: var(--base-800);
 }
 
-/* inline code 스타일 */
 .prose code {
-
   background-color: #F2F4F6 !important;
   padding: 0.2rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.85rem;
 }
 
-/* pre 내부의 code는 배경 제거 (이중 배경 방지) */
 .prose pre code {
   background-color: transparent !important;
   padding: 0 !important;
 }
 
-/* 다크 모드 */
 .dark .prose pre {
-  background-color: #1F2937 !important; /* Tailwind gray-800 */
+  background-color: #1F2937 !important;
   color: #F8FAFC !important;
 }
 
 .dark .prose code {
-  background-color: #374151 !important; /* Tailwind gray-700 */
+  background-color: #374151 !important;
   color: #F8FAFC !important;
 }
 
@@ -109,11 +145,32 @@ button, .button-text {
   background-color: transparent !important;
 }
 
+/* =========================
+   LISTS
+========================= */
+.prose ol,
+.prose ol li {
+  list-style-type: decimal !important;
+}
+
+.prose ol > li::marker {
+  font-weight: bold;
+  color: black;
+}
+
+.prose ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5rem;
+}
+
+.prose li::marker {
+  font-weight: bold;
+}
+
 .prose ul {
   list-style-type: disc;
   padding-left: 1.5rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin: 0.5rem 0;
 }
 
 .prose li {
@@ -121,19 +178,21 @@ button, .button-text {
   padding-left: 0.25rem;
   line-height: 1.6;
   font-size: 0.95rem;
-  color: #23292F; /* Adjust for light mode */
+  color: var(--base-700);
 }
 
 .dark .prose li {
-  color: #F5F5F5; /* Light color for dark mode */
+  color: #F5F5F5;
 }
 
+/* =========================
+   HEADINGS & PARAGRAPHS
+========================= */
 .prose p {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
   line-height: 1.8;
   font-size: 1rem;
-  color: #1B1F23;
+  color: var(--base-800);
 }
 
 .dark .prose p {
@@ -141,73 +200,37 @@ button, .button-text {
 }
 
 .prose h2 {
-  font-size: 1.5rem; /* ~24px */
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  color: #1B1F23;
-  border-bottom: 1px solid #E2EBF2;
+  margin: 2rem 0 1rem;
+  color: var(--base-800);
+  border-bottom: 1px solid var(--base-200);
   padding-bottom: 0.4rem;
 }
 
 .prose h3 {
-  font-size: 1.25rem; /* ~20px */
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-  color: #1B1F23;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--base-800);
 }
 
-/* === Dark mode overrides === */
-
-.dark .prose li,
-.dark .prose p,
 .dark .prose h2,
-.dark .prose h3 {
+.dark .prose h3,
+.dark .prose li,
+.dark .prose p {
   color: #F5F5F5;
 }
 
 .dark .prose h2 {
-  border-bottom: 1px solid #3B434B;
+  border-bottom: 1px solid var(--base-600);
 }
 
-
-/* body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
-
-
-ul, ol {
-  list-style-type: disc;
-  padding-left: 1.25rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-li {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #1B1F23;
-}
-
-.dark ul,
-.dark ol {
-  list-style-type: disc;
-  padding-left: 1.25rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.dark li {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #F5F5F5;
-}
-
+/* =========================
+   LINKS
+========================= */
 .prose a {
-  color: #52F756;
+  color: var(--accent-green);
   text-decoration: underline;
   text-underline-offset: 3px;
   font-weight: 500;
@@ -219,29 +242,89 @@ li {
 }
 
 .dark .prose a {
-  color: #52F756;
+  color: var(--accent-green);
 }
 
 .dark .prose a:hover {
   color: #6DFF6C;
 }
 
+/* =========================
+   TABLES
+========================= */
 
-.prose table {
+.prose table { /* Force equal-width columns */
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
+  border-collapse: collapse; /* Ensures no spacing between cells */
+  border: 1px solid var(--base-300); /* Add outer border */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures no spacing between cells */
+  border: 1px solid var(--base-300); /* Add outer border */
 }
 
 .prose th,
 .prose td {
-  border: 1px solid #e2ebf2;
+  border: 1px solid var(--base-300); /* Add cell borders */
+  word-break: keep-all;
+  white-space: nowrap;
   padding: 0.75rem;
   text-align: left;
+  vertical-align: top;
 }
+
+
+th, td {
+  border: 1px solid var(--base-300); /* Add cell borders */
+  word-break: keep-all;
+  white-space: nowrap;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.dark .prose table {
+  border: 1px solid var(--base-600);
+}
+
+.dark table {
+  border: 1px solid var(--base-600);
+}
+
 
 .dark .prose th,
 .dark .prose td {
-  border-color: #3B434B;
+  border-color: var(--base-600);
+}
+
+.dark th, td {
+  border: 1px solid var(--base-600);
+}
+
+/* =========================
+   LIST OUTSIDE PROSE
+========================= */
+
+ul {
+  list-style-type: disc;
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+li {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--base-800);
+}
+
+.dark li {
+  color: #F5F5F5;
 }
