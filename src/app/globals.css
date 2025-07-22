@@ -148,6 +148,25 @@ button,
 /* =========================
    LISTS
 ========================= */
+.prose ol,
+.prose ol li {
+  list-style-type: decimal !important;
+}
+
+.prose ol > li::marker {
+  font-weight: bold;
+  color: black;
+}
+
+.prose ol {
+  list-style-type: decimal !important;
+  margin-left: 1.5rem;
+}
+
+.prose li::marker {
+  font-weight: bold;
+}
+
 .prose ul {
   list-style-type: disc;
   padding-left: 1.5rem;
@@ -233,29 +252,69 @@ button,
 /* =========================
    TABLES
 ========================= */
-.prose table {
+
+.prose table { /* Force equal-width columns */
   width: 100%;
-  border-collapse: collapse;
-  margin: 1.5rem 0;
+  border-collapse: collapse; /* Ensures no spacing between cells */
+  border: 1px solid var(--base-300); /* Add outer border */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensures no spacing between cells */
+  border: 1px solid var(--base-300); /* Add outer border */
 }
 
 .prose th,
 .prose td {
-  border: 1px solid var(--base-200);
+  border: 1px solid var(--base-300); /* Add cell borders */
+  word-break: keep-all;
+  white-space: nowrap;
   padding: 0.75rem;
   text-align: left;
+  vertical-align: top;
 }
+
+
+th, td {
+  border: 1px solid var(--base-300); /* Add cell borders */
+  word-break: keep-all;
+  white-space: nowrap;
+  padding: 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.dark .prose table {
+  border: 1px solid var(--base-600);
+}
+
+.dark table {
+  border: 1px solid var(--base-600);
+}
+
 
 .dark .prose th,
 .dark .prose td {
   border-color: var(--base-600);
 }
 
+.dark th, td {
+  border: 1px solid var(--base-600);
+}
+
 /* =========================
    LIST OUTSIDE PROSE
 ========================= */
-ul, ol {
+
+ul {
   list-style-type: disc;
+  padding-left: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+ol {
+  list-style-type: decimal;
   padding-left: 1.25rem;
   margin: 0.5rem 0;
 }

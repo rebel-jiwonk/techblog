@@ -76,6 +76,11 @@ export const AUTHORS: Record<
     name_en: "Jo Gyu-sung",
     name_ko: "조규성",
     image: "/authors/gyusung.png",
+  },
+  "productinnovation2025@gmail.com": {
+    name_en: "Product Innovation Team",
+    name_ko: "Product Innovation Team",
+    image: "/authors/piteam.png",
   }
 };
     // "Paul Kuper": { image: "/authors/paul.png" },
