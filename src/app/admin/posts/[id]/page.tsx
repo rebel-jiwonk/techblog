@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabaseClient";
 import MDEditor, { commands as defaultCommands } from "@uiw/react-md-editor";
@@ -10,8 +10,49 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import GithubSlugger from "github-slugger";
 import Image from "next/image";
+import { ICommand } from "@uiw/react-md-editor";
 import TableOfContents from "@/components/TableOfContents";
 import { tagColors } from "@/lib/tagColors";
+
+async function uploadImageToSupabase(file: File): Promise<string> {
+  const bucket = "blog-assets";
+  const ext = file.name.split(".").pop();
+  const filePath = `editor-${Date.now()}.${ext}`;
+
+  const { error } = await supabase.storage.from(bucket).upload(filePath, file);
+  if (error) {
+    console.error("Upload failed:", error);
+    throw new Error("Upload failed: " + error.message);
+  }
+
+  const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
+  return data.publicUrl;
+}
+
+const imageUploadCommand: ICommand = {
+  name: "image",
+  keyCommand: "image",
+  buttonProps: { "aria-label": "Insert image" },
+  icon: <span>🖼️</span>,
+  execute: async (state, api) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.click();
+
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (file) {
+        try {
+          const publicUrl = await uploadImageToSupabase(file);
+          api.replaceSelection(`![alt text](${publicUrl})`);
+        } catch (err) {
+          alert("Image upload failed: " + err);
+        }
+      }
+    };
+  },
+};
 
 const slugger = new GithubSlugger();
 slugger.reset();
@@ -34,7 +75,12 @@ interface Post {
   author_email: string;
   tags: string[];
   description?: string;
-  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements" ;
+  category:
+    | "Benchmark"
+    | "Tutorials"
+    | "Retrospectives"
+    | "Knowledge Base"
+    | "Announcements";
   cover_image?: string;
 }
 
@@ -45,20 +91,26 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [isPreview, setIsPreview] = useState(false);
 
-  const bucket = "blog-assets";
-  const commandList = defaultCommands.getCommands().filter((cmd) => cmd.name !== "image");
+  const commandList = [
+    ...defaultCommands.getCommands().filter((cmd) => cmd.name !== "image"),
+    imageUploadCommand,
+  ];
 
   const handleCoverUpload = async (file: File) => {
     const ext = file.name.split(".").pop();
     const filePath = `cover-${Date.now()}.${ext}`;
 
-    const { error: uploadError } = await supabase.storage.from(bucket).upload(filePath, file);
+    const { error: uploadError } = await supabase.storage
+      .from("blog-assets")
+      .upload(filePath, file);
     if (uploadError) {
       alert("Upload failed: " + uploadError.message);
       return;
     }
 
-    const { data: publicData } = supabase.storage.from(bucket).getPublicUrl(filePath);
+    const { data: publicData } = supabase.storage
+      .from("blog-assets")
+      .getPublicUrl(filePath);
     const publicUrl = publicData?.publicUrl;
 
     if (publicUrl) {
@@ -98,7 +150,11 @@ export default function Page() {
         return;
       }
 
-      const { data, error } = await supabase.from("posts").select("*").eq("id", id).single();
+      const { data, error } = await supabase
+        .from("posts")
+        .select("*")
+        .eq("id", id)
+        .single();
       if (error) {
         console.error("Error loading post:", error);
         return;
@@ -107,7 +163,7 @@ export default function Page() {
       setPost({
         ...data,
         tags: data.tags ?? [],
-        category: data.category ?? "Knowledge Base", // fallback
+        category: data.category ?? "Knowledge Base",
       });
       setLoading(false);
     }
@@ -115,209 +171,234 @@ export default function Page() {
     loadPost();
   }, [id, router]);
 
+  const handleDrop = useCallback(
+    async (event: DragEvent) => {
+      event.preventDefault();
+      const file = event.dataTransfer?.files?.[0];
+      if (file && file.type.startsWith("image/")) {
+        const publicUrl = await uploadImageToSupabase(file);
+        setPost((prev) => prev && { ...prev, content: prev.content + `\n\n![alt text](${publicUrl})` });
+      }
+    },
+    [setPost]
+  );
+
+  const handlePaste = useCallback(
+    async (event: ClipboardEvent) => {
+      const items = event.clipboardData?.items;
+      if (!items) return;
+
+      for (const item of items) {
+        if (item.type.startsWith("image/")) {
+          const file = item.getAsFile();
+          if (file) {
+            const publicUrl = await uploadImageToSupabase(file);
+            setPost((prev) => prev && { ...prev, content: prev.content + `\n\n![alt text](${publicUrl})` });
+          }
+        }
+      }
+    },
+    [setPost]
+  );
+
+  useEffect(() => {
+    window.addEventListener("drop", handleDrop);
+    window.addEventListener("paste", handlePaste);
+    return () => {
+      window.removeEventListener("drop", handleDrop);
+      window.removeEventListener("paste", handlePaste);
+    };
+  }, [handleDrop, handlePaste]);
+
   if (loading) return <div>Loading...</div>;
   if (!post) return <div>Post not found</div>;
 
   const availableTags = Object.keys(tagColors).filter((tag) =>
-  post?.lang === "en" ? /^[a-zA-Z0-9 ]+$/.test(tag) : /[가-힣]/.test(tag)
-);
+    post?.lang === "en" ? /^[a-zA-Z0-9 ]+$/.test(tag) : /[가-힣]/.test(tag)
+  );
 
   return (
-  <div className="p-6 space-y-6">
-    <div className="flex items-center justify-between">
-      {/* Left side */}
-      <button onClick={() => router.push("/admin")} className="text-sm text-gray-600 underline">
-        ← Back to Dashboard
-      </button>
-
-      {/* Right side */}
-      <div className="flex gap-3">
+    <div className="p-6 space-y-6">
+      <div className="flex items-center justify-between">
         <button
-          onClick={() => setIsPreview(!isPreview)}
-          className="px-3 py-2 border text-sm border-gray-300 hover:bg-gray-50"
+          onClick={() => router.push("/admin")}
+          className="text-sm text-gray-600 underline"
         >
-          {isPreview ? "Edit" : "Preview"}
+          ← Back to Dashboard
         </button>
-        <button onClick={handleSave} className="px-3 py-2 bg-black text-white text-sm">
-          Save
-        </button>
-        <button
-          onClick={handlePublish}
-          disabled={post.published}
-          className={`px-3 py-2 text-sm ${
-            post.published
-              ? "bg-green-600 text-white"
-              : "bg-white border border-green-600 text-green-600 hover:bg-green-50"
-          }`}
-        >
-          {post.published ? "Published" : "Publish"}
-        </button>
-      </div>
-    </div>
-
-    {/* Shared Cover Image Preview */}
-    {post.cover_image && (
-      <Image
-        src={post.cover_image}
-        alt="Cover"
-        width={900}
-        height={500}
-        className="mx-auto object-contain my-6 max-h-[500px] w-full"
-      />
-    )}
-
-    {/* Edit Mode */}
-{!isPreview ? (
-  <div className="space-y-4">
-    <div>
-      <label className="block text-sm font-bold mb-1">UPLOAD NEW COVER IMAGE</label>
-      <div className="w-full flex items-center gap-3">
-        <label
-          htmlFor="cover-upload"
-          className="w-full text-center px-4 py-2 border border-black text-sm cursor-pointer hover:bg-gray-50 transition"
-        >
-          {post.cover_image ? "Change Image" : "Select Image"}
-        </label>
-        <span className="text-sm text-gray-600 whitespace-nowrap">
-          {post.cover_image ? "Image selected ✅" : "No file chosen"}
-        </span>
-      </div>
-      <input
-        id="cover-upload"
-        type="file"
-        accept="image/*"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleCoverUpload(file);
-        }}
-        className="hidden"
-      />
-    </div>
-
-    <div>
-      <label className="block text-sm font-bold mb-1">TITLE</label>
-      <textarea
-        value={post.title}
-        onChange={(e) => setPost({ ...post, title: e.target.value })}
-        rows={2}
-        className="w-full p-2 border focus:ring-2 focus:ring-black"
-      />
-    </div>
-
-    <div>
-      <label className="block text-sm font-bold mb-1">SLUG</label>
-      <input
-        value={post.slug}
-        onChange={(e) => setPost({ ...post, slug: e.target.value })}
-        className="w-full p-2 border focus:ring-2 focus:ring-black"
-      />
-    </div>
-
-    <div>
-      <label className="block text-sm font-bold mb-1">LANGUAGE</label>
-      <select
-        value={post.lang}
-        onChange={(e) => setPost({ ...post, lang: e.target.value as "en" | "ko" })}
-        className="w-full p-2 border focus:ring-2 focus:ring-black"
-      >
-        <option value="en">English</option>
-        <option value="ko">Korean</option>
-      </select>
-    </div>
-
-    <div>
-      <label className="block text-sm font-bold mb-1">CATEGORY</label>
-      <select
-        value={post.category}
-        onChange={(e) =>
-          setPost({ ...post, category: e.target.value as Post["category"] })
-        }
-        className="w-full p-2 border focus:ring-2 focus:ring-black"
-      >
-        {categories.map((cat) => (
-          <option key={cat} value={cat}>
-            {cat}
-          </option>
-        ))}
-      </select>
-    </div>
-
-    <div>
-      <label className="block text-sm font-bold mb-1">TAGS</label>
-      <div className="flex flex-wrap gap-2 relative z-50">
-        {availableTags.map((tag) => (
+        <div className="flex gap-3">
           <button
-            key={tag}
-            type="button"
-            className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black ${
-              post.tags.includes(tag)
-                ? `${tagColors[tag]} ring-2 ring-black` // Highlight when selected
-                : "bg-white"
-            }`}
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              borderRadius: "0px",
-            }}
-            onClick={() =>
-              setPost((prev) => ({
-                ...prev!,
-                tags: prev!.tags.includes(tag)
-                  ? prev!.tags.filter((t) => t !== tag)
-                  : [...prev!.tags, tag],
-              }))
-            }
+            onClick={() => setIsPreview(!isPreview)}
+            className="px-3 py-2 border text-sm border-gray-300 hover:bg-gray-50"
           >
-            #{tag}
+            {isPreview ? "Edit" : "Preview"}
           </button>
-        ))}
-      </div>
-    </div>
-
-    <div>
-      <label className="block text-sm font-bold mb-1">CONTENT</label>
-      <div className="border rounded overflow-hidden" style={{ height: "600px" }}>
-        <MDEditor
-          value={post.content}
-          onChange={(value) => setPost({ ...post, content: value || "" })}
-          commands={commandList}
-          height="100%"
-        />
-      </div>
-    </div>
-  </div>
-    ) : (
-      // Preview Mode
-      <div className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-12">
-        <aside className="hidden lg:block">
-          <TableOfContents />
-        </aside>
-        <div>
-          <div className="text-lg text-gray-500 italic mb-2">Preview Mode</div>
-          <article className="prose prose-lg dark:prose-invert max-w-none
-            prose-code:text-sm prose-code:bg-gray-100 prose-code:px-1 prose-code:rounded
-            prose-pre:bg-gray-900 prose-pre:text-sm prose-pre:text-white prose-pre:rounded-md prose-pre:p-4
-            prose-table:table-auto prose-table:w-full prose-th:border prose-td:border
-            prose-th:border-gray-300 prose-td:border-gray-200 prose-th:px-3 prose-th:py-2 prose-td:px-3 prose-td:py-2
-            prose-blockquote:bg-[#F0F8FF] prose-blockquote:px-4 prose-blockquote:py-3 prose-blockquote:rounded-md prose-blockquote:border-l-4 prose-blockquote:border-blue-400 prose-blockquote:text-gray-900"
+          <button
+            onClick={handleSave}
+            className="px-3 py-2 bg-black text-white text-sm"
           >
-            <ReactMarkdown
-                remarkPlugins={[remarkBreaks, remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
-                // components={{
-                //   ol: ({ node, ...props }) => (
-                //     <ol className="list-decimal ml-6 marker:font-bold marker:text-black" {...props} />
-                //   ),
-                //   ul: ({ node, ...props }) => (
-                //     <ul className="list-disc ml-6" {...props} />
-                //   ),
-                // }}
-            >
-              {post.content}
-            </ReactMarkdown>
-          </article>
+            Save
+          </button>
+          <button
+            onClick={handlePublish}
+            disabled={post.published}
+            className={`px-3 py-2 text-sm ${
+              post.published
+                ? "bg-green-600 text-white"
+                : "bg-white border border-green-600 text-green-600 hover:bg-green-50"
+            }`}
+          >
+            {post.published ? "Published" : "Publish"}
+          </button>
         </div>
       </div>
-    )}
-  </div>
-);
+
+      {post.cover_image && (
+        <Image
+          src={post.cover_image}
+          alt="Cover"
+          width={900}
+          height={500}
+          className="mx-auto object-contain my-6 max-h-[500px] w-full"
+        />
+      )}
+
+      {!isPreview ? (
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold mb-1">UPLOAD NEW COVER IMAGE</label>
+            <div className="w-full flex items-center gap-3">
+              <label
+                htmlFor="cover-upload"
+                className="w-full text-center px-4 py-2 border border-black text-sm cursor-pointer hover:bg-gray-50 transition"
+              >
+                {post.cover_image ? "Change Image" : "Select Image"}
+              </label>
+              <span className="text-sm text-gray-600 whitespace-nowrap">
+                {post.cover_image ? "Image selected ✅" : "No file chosen"}
+              </span>
+            </div>
+            <input
+              id="cover-upload"
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) handleCoverUpload(file);
+              }}
+              className="hidden"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-1">TITLE</label>
+            <textarea
+              value={post.title}
+              onChange={(e) => setPost({ ...post, title: e.target.value })}
+              rows={2}
+              className="w-full p-2 border focus:ring-2 focus:ring-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-1">SLUG</label>
+            <input
+              value={post.slug}
+              onChange={(e) => setPost({ ...post, slug: e.target.value })}
+              className="w-full p-2 border focus:ring-2 focus:ring-black"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-1">LANGUAGE</label>
+            <select
+              value={post.lang}
+              onChange={(e) => setPost({ ...post, lang: e.target.value as "en" | "ko" })}
+              className="w-full p-2 border focus:ring-2 focus:ring-black"
+            >
+              <option value="en">English</option>
+              <option value="ko">Korean</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-1">CATEGORY</label>
+            <select
+              value={post.category}
+              onChange={(e) =>
+                setPost({ ...post, category: e.target.value as Post["category"] })
+              }
+              className="w-full p-2 border focus:ring-2 focus:ring-black"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-1">TAGS</label>
+            <div className="flex flex-wrap gap-2 relative z-50">
+              {availableTags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  className={`text-xs font-mono font-medium px-3 py-1 border border-base-300 text-black ${
+                    post.tags.includes(tag)
+                      ? `${tagColors[tag]} ring-2 ring-black`
+                      : "bg-white"
+                  }`}
+                  style={{
+                    fontFamily: "'Space Mono', monospace",
+                    borderRadius: "0px",
+                  }}
+                  onClick={() =>
+                    setPost((prev) => ({
+                      ...prev!,
+                      tags: prev!.tags.includes(tag)
+                        ? prev!.tags.filter((t) => t !== tag)
+                        : [...prev!.tags, tag],
+                    }))
+                  }
+                >
+                  #{tag}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold mb-1">CONTENT</label>
+            <div className="border rounded overflow-hidden" style={{ height: "600px" }}>
+              <MDEditor
+                value={post.content}
+                onChange={(value) => setPost({ ...post, content: value || "" })}
+                commands={commandList}
+                height="100%"
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] gap-12">
+          <aside className="hidden lg:block">
+            <TableOfContents />
+          </aside>
+          <div>
+            <div className="text-lg text-gray-500 italic mb-2">Preview Mode</div>
+            <article className="prose prose-lg dark:prose-invert max-w-none">
+              <ReactMarkdown
+                remarkPlugins={[remarkBreaks, remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+              >
+                {post.content}
+              </ReactMarkdown>
+            </article>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
