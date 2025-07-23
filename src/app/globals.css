@@ -328,3 +328,27 @@ li {
 .dark li {
   color: #F5F5F5;
 }
+
+/* =========================
+   BUTTON AND LABEL STYLING
+========================= */
+.dark button {
+ color: var(--base-800);
+}
+
+.dark span.tag-label,
+.dark span.category-label {
+  color: var(--base-800);
+}
+
+.dark .logout-button {
+  color: var(--base-200);
+}
+
+.dark .logout-button:hover {
+  color: var(--base-800);
+}
+
+.dark .dark-light-button {
+  color: var(--base-200);
+}

@@ -117,7 +117,7 @@ export default function AdminPage() {
         {userEmail && (
           <button
             onClick={handleLogout}
-            className="text-sm border border-gray-400 px-3 py-1 hover:bg-gray-100 hover:text-gray-600"
+            className="logout-button text-sm border border-gray-400 px-3 py-1 hover:bg-gray-100 hover:text-gray-600"
           >
             Logout ({userEmail})
           </button>
@@ -175,9 +175,10 @@ export default function AdminPage() {
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilterByCategory(null)}
-              className={`px-3 py-1 text-xs font-semibold uppercase border ${
-                filterByCategory === null ? "bg-green-200 border-green-400" : "bg-white border-gray-300"
-              }`}
+              className={`px-3 py-1 text-xs font-semibold uppercase border 
+                ${filterByCategory === null
+                  ? "bg-green-200 text-black border-green-400 dark:bg-green-400 dark:text-black"
+                  : "bg-white text-black border-gray-300 dark:bg-gray-700 dark:text-white"}`}
             >
               All
             </button>
@@ -266,7 +267,7 @@ export default function AdminPage() {
                 <div>
                   {/* Title + Category */}
                   <div className="flex items-center gap-3 mb-1">
-                    <span className="text-xs px-2 py-0.5 font-mono uppercase border bg-gray-100">
+                    <span className="category-label text-xs px-2 py-0.5 font-mono uppercase border bg-gray-100 dark:font-gray-800">
                       {post.category || "No Category"}
                     </span>
                     <Link
@@ -298,7 +299,7 @@ export default function AdminPage() {
                       {post.tags.map((tag, i) => (
                         <span
                           key={i}
-                          className={`text-xs px-2 py-0.5 font-mono uppercase ${
+                          className={`tag-label text-xs px-2 py-0.5 font-mono uppercase ${
                             tagColors[tag] || "bg-gray-200"
                           }`}
                         >
