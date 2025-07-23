@@ -15,7 +15,7 @@ interface Post {
   published: boolean;
   created_at: string;
   author_email: string;
-  category: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base";
+  category: "Infographics" | "Tutorials" |"Benchmark" |  "Retrospectives" | "Onboarding"| "Deep Dive";
   tags: string[];
   lang: "en" | "ko";
   featured: boolean;

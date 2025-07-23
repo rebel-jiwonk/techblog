@@ -4,7 +4,7 @@ export type BlogPost = {
   slug: string;
   description: string;
   created_at: string;
-  category?: "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base"| "Announcements";
+  category?: "Infographics" | "Benchmark" | "Tutorials" | "Retrospectives" | "Onboarding"| "Deep Dive";
   tags: string[];
   authors: {
     name: string;

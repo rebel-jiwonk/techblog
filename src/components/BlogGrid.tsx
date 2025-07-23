@@ -24,12 +24,12 @@ export default function BlogGrid({
 }) {
   const [filterByTag, setFilterByTag] = useState<string | null>(null);
   const [filterByCategory, setFilterByCategory] = useState<
-    "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements" | null
+    "Infographics" | "Tutorials" |"Benchmark" |  "Retrospectives" | "Onboarding" | "Deep Dive" | null
   >(null);
 
   const categories: Array<
-    "Benchmark" | "Tutorials" | "Retrospectives" | "Knowledge Base" | "Announcements"
-  > = ["Benchmark", "Tutorials", "Retrospectives", "Knowledge Base", "Announcements"];
+    "Infographics" | "Tutorials" |"Benchmark" | "Retrospectives" | "Onboarding" | "Deep Dive"
+  > = ["Infographics", "Tutorials", "Benchmark", "Retrospectives", "Onboarding", "Deep Dive"];
 
   // Filter posts based on category and tag
   const filteredPosts = initialPosts.filter((post) => {

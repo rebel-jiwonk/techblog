@@ -58,11 +58,12 @@ const slugger = new GithubSlugger();
 slugger.reset();
 
 const categories = [
+  "Infographics",
   "Benchmark",
   "Tutorials",
   "Retrospectives",
-  "Knowledge Base",
-  "Announcements",
+  "Onboarding",
+  "Deep Dive",
 ] as const;
 
 interface Post {
@@ -76,11 +77,7 @@ interface Post {
   tags: string[];
   description?: string;
   category:
-    | "Benchmark"
-    | "Tutorials"
-    | "Retrospectives"
-    | "Knowledge Base"
-    | "Announcements";
+   "Infographics" | "Tutorials" | "Benchmark" | "Retrospectives" | "Onboarding"| "Deep Dive";
   cover_image?: string;
 }
 
@@ -163,7 +160,7 @@ export default function Page() {
       setPost({
         ...data,
         tags: data.tags ?? [],
-        category: data.category ?? "Knowledge Base",
+        category: data.category ?? "Onboarding",
       });
       setLoading(false);
     }
