@@ -346,6 +346,24 @@ export default function AdminPage() {
                   >
                     Edit
                   </Link>
+
+                  <button
+                  onClick={async () => {
+                    const confirmDelete = confirm("Are you sure you want to delete this post?");
+                    if (!confirmDelete) return;
+
+                    const { error } = await supabase.from("posts").delete().eq("id", post.id);
+                    if (error) {
+                      alert("Failed to delete: " + error.message);
+                      return;
+                    }
+
+                    setPosts((prev) => prev.filter((p) => p.id !== post.id));
+                  }}
+                  className="text-xs px-2 py-1 border border-red-300 text-red-600 bg-red-50 hover:bg-red-100"
+                >
+                  Delete
+                </button>
                 </div>
               </div>
             );
