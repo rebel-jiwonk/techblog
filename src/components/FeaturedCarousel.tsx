@@ -12,6 +12,7 @@ type Post = {
   created_at: string;
   tags: string[];
   cover_image: string;
+  category?: string;
 };
 
 export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
@@ -31,7 +32,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
             <Link
               key={index}
               href={`/${post.lang}/blog/${post.slug}`}
-              className="min-w-[330px] max-w-[300px] bg-[var(--base-50)] dark:bg-[var(--base-700)] border border-[var(--base-200)] dark:border-[var(--base-600)] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all p-4 flex-shrink-0"
+              className="featured-card min-w-[330px] max-w-[300px] bg-[var(--base-50)] dark:bg-[var(--base-700)] border border-[var(--base-200)] dark:border-[var(--base-600)] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all p-4 flex-shrink-0"
               style={{ borderRadius: "4px" }}
             >
               <Image
@@ -39,17 +40,21 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                 alt={post.title}
                 width={300}
                 height={160}
-                className="rounded mb-3 object-cover"
+                className="featured-image rounded mb-3 object-cover"
               />
 
               {/* Text Container */}
               <div className="flex flex-col w-[300px]">
-                <span className="text-sm text-[var(--base-500)] mb-2 block">
-                  {formattedDate}
-                </span>
+                {/* Category */}
+                {post.category && (
+                  <span className="category-label text-sm font-bold uppercase text-[var(--accent-green)] mb-2">
+                    {post.category}
+                  </span>
+                )}
 
+                {/* Title */}
                 <div
-                  className="font-semibold text-[var(--base-800)] dark:text-[var(--base-50)] mb-2 overflow-hidden"
+                  className="featured-title font-semibold text-[var(--base-800)] dark:text-[var(--base-50)] mb-2 overflow-hidden"
                   style={{
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
@@ -59,24 +64,31 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   {post.title}
                 </div>
 
+                {/* Date */}
+                <span className="featured-date text-xs text-[var(--base-500)] mb-2 block">
+                  {formattedDate}
+                </span>
+
                 {/* Tags */}
-                <div className="flex flex-wrap gap-2 mt-2 text-xs">
-                  {post.tags?.map((tag, i) => (
-                    <span
-                      key={i}
-                      onClick={() => setFilterByTag(tag)}
-                      className={`text-xs font-mono font-medium px-3 py-1 border border-[var(--base-300)] ${
-                        tagColors[tag] || "bg-[var(--base-200)] text-black"
-                      }`}
-                      style={{
-                        fontFamily: "'Space Mono', monospace",
-                        borderRadius: "0px",
-                      }}
-                    >
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
+                {post.tags?.length > 0 && (
+                  <div className="featured-tags flex flex-wrap gap-2 mt-2 text-[10px]">
+                    {post.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        onClick={() => setFilterByTag(tag)}
+                        className={`featured-tag px-2 py-0.5 border border-[var(--base-300)] ${
+                          tagColors[tag] || "bg-[var(--base-200)] text-black"
+                        }`}
+                        style={{
+                          fontFamily: "'Space Mono', monospace",
+                          borderRadius: "0px",
+                        }}
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </Link>
           );
