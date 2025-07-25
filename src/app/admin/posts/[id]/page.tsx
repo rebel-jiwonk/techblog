@@ -369,12 +369,12 @@ export default function Page() {
           <div>
             <label className="block text-sm font-bold mb-1">CONTENT</label>
             <div className="border rounded overflow-hidden" style={{ height: "600px" }}>
-              <MDEditor
-                value={post.content.replace(/<username>/g, "&lt;username&gt;")}
+             <MDEditor
+                value={post.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
                 onChange={(value) => setPost({ ...post, content: value || "" })}
                 commands={commandList}
                 height="100%"
-              />
+              /> 
             </div>
           </div>
         </div>
