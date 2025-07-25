@@ -17,9 +17,16 @@ import { tagColors } from "@/lib/tagColors";
 async function uploadImageToSupabase(file: File): Promise<string> {
   const bucket = "blog-assets";
   const ext = file.name.split(".").pop();
+
+  if (!ext) throw new Error("File has no extension");
+
   const filePath = `editor-${Date.now()}.${ext}`;
 
-  const { error } = await supabase.storage.from(bucket).upload(filePath, file);
+  // Accept gif, png, jpg, etc.
+  const { error } = await supabase.storage.from(bucket).upload(filePath, file, {
+    contentType: file.type,
+  });
+
   if (error) {
     console.error("Upload failed:", error);
     throw new Error("Upload failed: " + error.message);
@@ -370,7 +377,7 @@ export default function Page() {
             <label className="block text-sm font-bold mb-1">CONTENT</label>
             <div className="border rounded overflow-hidden" style={{ height: "600px" }}>
              <MDEditor
-                value={post.content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+                value={post.content}
                 onChange={(value) => setPost({ ...post, content: value || "" })}
                 commands={commandList}
                 height="100%"
