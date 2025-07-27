@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { tagColors } from "@/lib/tagColors";
@@ -16,17 +16,39 @@ type Post = {
 };
 
 export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
+  const carouselRef = useRef<HTMLDivElement | null>(null);
   const [, setFilterByTag] = useState<string | null>(null);
 
+  const scroll = (direction: "left" | "right") => {
+    if (!carouselRef.current) return;
+    const scrollAmount = 350; // Adjust this for how much to scroll per click
+    carouselRef.current.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <div className="mb-12 overflow-x-auto">
-      <div className="flex gap-6">
+    <div className="relative mb-12">
+      {/* Left Arrow */}
+      <button
+        onClick={() => scroll("left")}
+        className="absolute left-0 top-1/2 -translate-y-1/2 bg-white dark:bg-[var(--base-700)] shadow-md p-2 rounded-full z-10 hover:bg-gray-100 dark:hover:bg-[var(--base-600)]"
+        aria-label="Scroll Left"
+      >
+        ◀
+      </button>
+
+      {/* Carousel Container */}
+      <div
+        ref={carouselRef}
+        className="flex gap-6 overflow-x-hidden scroll-smooth"
+      >
         {posts.map((post, index) => {
-          const formattedDate = new Date(post.created_at).toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-          });
+          const formattedDate = new Date(post.created_at).toLocaleDateString(
+            "en-US",
+            { year: "numeric", month: "short", day: "numeric" }
+          );
 
           return (
             <Link
@@ -43,16 +65,13 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                 className="featured-image rounded mb-3 object-cover"
               />
 
-              {/* Text Container */}
               <div className="flex flex-col w-[300px]">
-                {/* Category */}
                 {post.category && (
                   <span className="category-label text-sm font-bold uppercase text-[var(--accent-green)] mb-2">
                     {post.category}
                   </span>
                 )}
 
-                {/* Title */}
                 <div
                   className="featured-title font-semibold text-[var(--base-800)] dark:text-[var(--base-50)] mb-2 overflow-hidden"
                   style={{
@@ -64,12 +83,10 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
                   {post.title}
                 </div>
 
-                {/* Date */}
                 <span className="featured-date text-xs text-[var(--base-500)] mb-2 block">
                   {formattedDate}
                 </span>
 
-                {/* Tags */}
                 {post.tags?.length > 0 && (
                   <div className="featured-tags flex flex-wrap gap-2 mt-2 text-[10px]">
                     {post.tags.map((tag, i) => (
@@ -94,6 +111,15 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
           );
         })}
       </div>
+
+      {/* Right Arrow */}
+      <button
+        onClick={() => scroll("right")}
+        className="absolute right-0 top-1/2 -translate-y-1/2 bg-white dark:bg-[var(--base-700)] shadow-md p-2 rounded-full z-10 hover:bg-gray-100 dark:hover:bg-[var(--base-600)]"
+        aria-label="Scroll Right"
+      >
+        ▶
+      </button>
     </div>
   );
 }
