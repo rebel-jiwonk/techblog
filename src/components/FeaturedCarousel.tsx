@@ -20,7 +20,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
 
   return (
     <div className="mb-12 overflow-x-auto">
-      <div className="flex gap-6">
+      <div className="flex gap-6 w-max">
         {posts.map((post, index) => {
           const formattedDate = new Date(post.created_at).toLocaleDateString("en-US", {
             year: "numeric",
@@ -32,7 +32,7 @@ export default function FeaturedCarousel({ posts }: { posts: Post[] }) {
             <Link
               key={index}
               href={`/${post.lang}/blog/${post.slug}`}
-              className="featured-card min-w-[330px] max-w-[300px] bg-[var(--base-50)] dark:bg-[var(--base-700)] border border-[var(--base-200)] dark:border-[var(--base-600)] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all p-4 flex-shrink-0"
+              className="featured-card min-w-[300px] max-w-[300px] bg-[var(--base-50)] dark:bg-[var(--base-700)] border border-[var(--base-200)] dark:border-[var(--base-600)] shadow-sm hover:shadow-md hover:scale-[1.02] transition-all p-4 flex-shrink-0"
               style={{ borderRadius: "4px" }}
             >
               <Image
