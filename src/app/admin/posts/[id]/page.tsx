@@ -162,6 +162,7 @@ export default function Page() {
       setPost({
         ...data,
         tags: data.tags ?? [],
+        authors: data.authors ?? [], // Ensure it's always an array
         category: data.category ?? "Onboarding",
       });
       setLoading(false);
@@ -314,7 +315,6 @@ export default function Page() {
         image: AUTHORS[selectedKey]?.image || null,
       };
 
-      // Add only if not already selected
       setPost((prev) => ({
         ...prev!,
         authors: prev!.authors.some((a) => a.name === selectedKey)

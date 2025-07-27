@@ -13,6 +13,23 @@ import GithubSlugger from "github-slugger";
 import Image from "next/image";
 import { tagColors } from "@/lib/tagColors";
 
+interface Author {
+  name: string;
+  image?: string | null;
+}
+
+interface Post {
+  title: string;
+  slug: string;
+  created_at: string;
+  lang: string;
+  authors?: Author[];
+  description: string;
+  category: string;
+  tags: string[];
+  content: string;
+  cover_image?: string;
+}
 
 // Define StaticParams to use Promise consistently
 type StaticParams = {
@@ -65,7 +82,7 @@ export default async function BlogPostPage({ params }: StaticParams) {
 
   const { data: post, error } = await supabase
     .from("posts")
-    .select("title, slug, created_at, lang, author_email, author_image, description, category, tags, content, cover_image")
+    .select("title, slug, created_at, lang, author_email, authors, author_image, description, category, tags, content, cover_image")
     .eq("slug", slug)
     .eq("lang", lang)
     .eq("published", true)
@@ -81,7 +98,7 @@ export default async function BlogPostPage({ params }: StaticParams) {
       <aside className="hidden lg:block">
         <TableOfContents />
       </aside>
-      <div>
+      <div className="w-full overflow-x-auto">
         {post.cover_image && (
           <Image
             src={post.cover_image}
@@ -91,19 +108,23 @@ export default async function BlogPostPage({ params }: StaticParams) {
             className="mx-auto rounded-lg object-contain my-6 max-h-[500px] w-full"
           />
         )}
-        <article className="prose prose-lg text-base-800 dark:text-base-50">
+        <article className="prose prose-lg text-base-800 dark:text-base-50 max-w-full">
           <h1 className="text-3xl font-extrabold leading-snug mt-8 mb-6 text-center">{post.title}</h1>
           <div className="flex justify-center items-center gap-4 text-base text-base-500 mb-6">
-            {AUTHORS[post.author_email]?.image && (
-              <Image
-                src={AUTHORS[post.author_email]?.image || "/authors/default.png"}
-                alt={post.author_email}
-                className="w-8 h-8 object-cover rounded-full"
-                width={32}
-                height={32}
-              />
-            )}
-            <span>{AUTHORS[post.author_email]?.name_en || post.author_email}</span>
+            {post.authors?.map((author: Author, index: number) => (
+              <div key={index} className="flex items-center gap-2">
+                {AUTHORS[author.name]?.image && (
+                  <Image
+                    src={AUTHORS[author.name]?.image || "/authors/default.png"}
+                    alt={author.name}
+                    className="w-8 h-8 object-cover rounded-full"
+                    width={32}
+                    height={32}
+                  />
+                )}
+                <span>{AUTHORS[author.name]?.name_en || author.name}</span>
+              </div>
+            ))}
             <span>•</span>
             <span>
               {new Date(post.created_at).toLocaleDateString("en-US", {
