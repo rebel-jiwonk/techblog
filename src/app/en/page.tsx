@@ -11,7 +11,7 @@ export default async function EnglishHome() {
   return (
     <div className="space-y-24">
       {/* Hero Section */}
-      <section className="relative h-[500px] overflow-hidden rounded-md">
+      <section className="relative h-[500px] w-full rounded-md">
         <video
           autoPlay
           muted

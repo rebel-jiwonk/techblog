@@ -397,3 +397,11 @@ li {
   text-transform: uppercase;
   color: var(--base-600)
 }
+
+h2 {
+  color: var(--base-800);
+}
+
+.dark h2 {
+  color: var(--base-50s)
+}

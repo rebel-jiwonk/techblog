@@ -46,7 +46,7 @@ export default function BlogGrid({
   return (
     <section className="space-y-8 relative">
       {/* Category Filter Bar */}
-      <div className="top-0 z-50 bg-[var(--base-50)] dark:bg-[var(--base-800)] py-3 border-b border-[var(--base-200)] dark:border-[var(--base-600)]">
+      <div className="top-0 z-50 bg-transparent py-3">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold ml-3 text-[var(--base-800)] dark:text-[var(--base-50)]">
             Articles
