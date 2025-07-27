@@ -13,6 +13,7 @@ import Image from "next/image";
 import { ICommand } from "@uiw/react-md-editor";
 import TableOfContents from "@/components/TableOfContents";
 import { tagColors } from "@/lib/tagColors";
+import { AUTHORS } from "@/lib/authors";
 
 async function uploadImageToSupabase(file: File): Promise<string> {
   const bucket = "blog-assets";
@@ -73,7 +74,7 @@ interface Post {
   content: string;
   lang: "en" | "ko";
   published: boolean;
-  author_email: string;
+  authors: { name: string; image?: string | null }[];
   tags: string[];
   description?: string;
   category:
@@ -334,7 +335,48 @@ export default function Page() {
               ))}
             </select>
           </div>
+                <div>
+                <label className="block text-sm font-bold mb-1">AUTHORS</label>
+                <div className="flex flex-wrap gap-3">
+                  {Object.keys(AUTHORS).map((authorKey) => {
+                    const author = AUTHORS[authorKey];
+                    const isSelected = post.authors?.some((a) => a.name === author.name_en);
 
+                    return (
+                      <button
+                        key={authorKey}
+                        type="button"
+                        className={`flex items-center gap-2 border px-3 py-1 text-sm ${
+                          isSelected ? "bg-black text-white" : "bg-white text-black"
+                        }`}
+                        onClick={() =>
+                          setPost((prev) => {
+                            if (!prev) return prev;
+                            const alreadySelected = prev.authors?.some((a) => a.name === author.name_en);
+                            return {
+                              ...prev,
+                              authors: alreadySelected
+                                ? prev.authors.filter((a) => a.name !== author.name_en)
+                                : [...(prev.authors || []), { name: author.name_en, image: author.image }],
+                            };
+                          })
+                        }
+                      >
+                        {author.image && (
+                          <Image
+                            src={author.image}
+                            alt={author.name_en}
+                            className="w-6 h-6 rounded-full object-cover"
+                            width={24}
+                            height={24}
+                          />
+                        )}
+                        <span>{author.name_en}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+</div>
           <div>
             <label className="block text-sm font-bold mb-1">TAGS</label>
             <div className="flex flex-wrap gap-2 relative z-50">
