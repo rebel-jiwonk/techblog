@@ -119,6 +119,7 @@ export default function BlogGrid({
               className="block border border-[var(--base-300)] dark:border-[var(--base-600)] p-6 bg-[var(--base-50)] dark:bg-[var(--base-800)] hover:bg-[var(--base-100)] dark:hover:bg-[var(--base-700)] transition-colors"
             >
               {/* Cover Image */}
+              <Link href={`/${post.lang}/blog/${post.slug}`}>
               {post.cover_image ? (
                 <Image
                   src={post.cover_image}
@@ -132,6 +133,7 @@ export default function BlogGrid({
                   No Image
                 </div>
               )}
+              </Link>
 
               {/* Title */}
               <Link href={`/${post.lang}/blog/${post.slug}`}>
