@@ -196,28 +196,30 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Author Filter */}
-        <div>
-          <p className="text-sm mb-1">Authors:</p>
-          <div className="flex flex-wrap gap-2">
-            {[...new Set(posts.map((p) => p.author_email))].map((authorEmail) => {
-              const author = AUTHORS[authorEmail] || {};
-              return (
-                <button
-                  key={authorEmail}
-                  onClick={() =>
-                    setFilterByAuthor(filterByAuthor === authorEmail ? null : authorEmail)
-                  }
-                  className={`px-3 py-1 text-xs font-semibold border ${
-                    filterByAuthor === authorEmail ? "bg-blue-200 border-blue-400" : "bg-white border-gray-300"
-                  }`}
-                >
-                  {author.name_ko || author.name_en || authorEmail}
-                </button>
-              );
-            })}
+       {/* Author Filter */}
+          <div>
+            <p className="text-sm mb-1">Authors:</p>
+            <div className="flex flex-wrap gap-2">
+              {Object.keys(AUTHORS).map((authorName: string) => {
+                const author = AUTHORS[authorName] || {};
+                return (
+                  <button
+                    key={authorName}
+                    onClick={() =>
+                      setFilterByAuthor(filterByAuthor === authorName ? null : authorName)
+                    }
+                    className={`px-3 py-1 text-xs font-semibold border ${
+                      filterByAuthor === authorName
+                        ? "bg-blue-200 border-blue-400"
+                        : "bg-white border-gray-300"
+                    }`}
+                  >
+                    {author.name_ko || author.name_en || authorName}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
         {/* Language Filter */}
         <div>
