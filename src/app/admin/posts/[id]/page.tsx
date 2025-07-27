@@ -10,6 +10,7 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import GithubSlugger from "github-slugger";
 import Image from "next/image";
+import { AUTHORS } from "@/lib/authors";
 import { ICommand } from "@uiw/react-md-editor";
 import TableOfContents from "@/components/TableOfContents";
 import { tagColors } from "@/lib/tagColors";
@@ -73,6 +74,7 @@ interface Post {
   content: string;
   lang: "en" | "ko";
   published: boolean;
+  authors: { name: string; image?: string | null }[];
   author_email: string;
   tags: string[];
   description?: string;
@@ -296,6 +298,75 @@ export default function Page() {
               className="w-full p-2 border focus:ring-2 focus:ring-black"
             />
           </div>
+
+          <div>
+  <label className="block text-sm font-bold mb-1">AUTHORS</label>
+
+  {/* Dropdown */}
+  <select
+    value=""
+    onChange={(e) => {
+      const selectedKey = e.target.value;
+      if (!selectedKey) return;
+
+      const newAuthor = {
+        name: selectedKey,
+        image: AUTHORS[selectedKey]?.image || null,
+      };
+
+      // Add only if not already selected
+      setPost((prev) => ({
+        ...prev!,
+        authors: prev!.authors.some((a) => a.name === selectedKey)
+          ? prev!.authors
+          : [...prev!.authors, newAuthor],
+      }));
+    }}
+    className="w-full p-2 border focus:ring-2 focus:ring-black"
+  >
+    <option value="">Add Author</option>
+    {Object.keys(AUTHORS)
+      .filter((key) => !post.authors?.some((a) => a.name === key))
+      .map((key) => (
+        <option key={key} value={key}>
+          {AUTHORS[key].name_en || key}
+        </option>
+      ))}
+  </select>
+
+  {/* Selected Authors */}
+  <div className="flex flex-wrap gap-2 mt-2">
+    {post.authors?.map((author, index) => (
+      <div
+        key={index}
+        className="flex items-center gap-2 px-3 py-1 bg-gray-100 border border-gray-300 text-sm"
+      >
+        {AUTHORS[author.name]?.image && (
+          <Image
+            src={AUTHORS[author.name]?.image || "/authors/default.png"}
+            alt={author.name}
+            className="w-5 h-5 rounded-full object-cover"
+            width={20}
+            height={20}
+          />
+        )}
+        <span>{AUTHORS[author.name]?.name_en || author.name}</span>
+        <button
+          type="button"
+          onClick={() =>
+            setPost((prev) => ({
+              ...prev!,
+              authors: prev!.authors.filter((_, i) => i !== index),
+            }))
+          }
+          className="ml-1 text-xs text-red-500 hover:underline"
+        >
+          ✕
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
 
           <div>
             <label className="block text-sm font-bold mb-1">SLUG</label>

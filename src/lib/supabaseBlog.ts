@@ -7,6 +7,7 @@ interface SupabasePost {
   created_at: string;
   author_email?: string;
   author_image?: string;
+  authors: { name: string; image?: string | null }[];
   description?: string;
   tags?: string[];
   cover_image?: string;
