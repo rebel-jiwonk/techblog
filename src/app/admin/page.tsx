@@ -15,6 +15,7 @@ interface Post {
   published: boolean;
   created_at: string;
   author_email: string;
+  authors: { name: string; image?: string | null }[];
   category: "Infographics" | "Tutorials" | "Benchmark" | "Retrospectives" | "Onboarding" | "Deep Dive";
   tags: string[];
   lang: "en" | "ko";
@@ -57,7 +58,7 @@ export default function AdminPage() {
 
       const { data, error: postsError } = await supabase
         .from("posts")
-        .select("id, title, slug, published, created_at, author_email, tags, lang, category, featured")
+        .select("id, title, slug, published, created_at, authors, author_email, tags, lang, category, featured")
         .order("created_at", { ascending: false });
 
       if (!postsError) setPosts(data || []);
@@ -280,19 +281,31 @@ export default function AdminPage() {
                     </Link>
                   </div>
 
-                  {/* Author */}
-                  <div className="flex items-center gap-2 mt-2 mb-2">
-                    {author?.image && (
-                      <Image
-                        src={author.image}
-                        alt={displayName}
-                        className="w-5 h-5 rounded-full object-cover"
-                        width={20}
-                        height={20}
-                      />
-                    )}
-                    <span className="text-sm font-semibold">Author:</span>
-                    <span className="text-sm">{displayName}</span>
+                  {/* Authors */}
+                  <div className="flex items-center gap-2 mt-2 mb-2 flex-wrap">
+                    <span className="text-sm font-semibold">Authors:</span>
+                    {post.authors?.map((author, index) => {
+                      const displayName =
+                        AUTHORS[author.name]?.name_en || AUTHORS[author.name]?.name_ko || author.name;
+
+                      const displayImage = AUTHORS[author.name]?.image || author.image;
+
+                      return (
+                        <div key={index} className="flex items-center gap-1">
+                          {displayImage && (
+                            <Image
+                              src={displayImage}
+                              alt={displayName}
+                              className="w-5 h-5 rounded-full object-cover"
+                              width={20}
+                              height={20}
+                            />
+                          )}
+                          <span className="text-sm">{displayName}</span>
+                          {index < post.authors.length - 1 && <span>,</span>}
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* Tags */}
